@@ -3,7 +3,7 @@
 # isomorphic-json-fetch 🐕🐕🐕
 
 I love [unfetch](https://github.com/developit/unfetch) ~~mostly because it
-reminds me of my dog~~ because it's such a lightweight non-nonsense fetch
+reminds me of my dog~~ because it's such a lightweight no-nonsense fetch
 library. This package is a small wrapper around (isomorphic) unfetch geared
 specifically for fetching JSON and easily sharing configuration across the
 application. Specifically:
