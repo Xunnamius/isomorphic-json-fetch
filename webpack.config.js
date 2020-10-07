@@ -4,6 +4,7 @@
 process.env.NODE_ENV = 'production';
 
 module.exports = {
+    target: 'node',
     mode: 'production',
     entry: `${__dirname}/src/index.ts`,
 

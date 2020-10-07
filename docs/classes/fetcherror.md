@@ -28,7 +28,7 @@
 
 \+ **new FetchError**(`res`: Response, `error?`: undefined \| string): [FetchError](fetcherror.md)
 
-*Defined in repos/isomorphic-json-fetch/node_modules/named-app-errors/dist/modules/index.d.ts:14*
+*Defined in node_modules/named-app-errors/dist/modules/index.d.ts:14*
 
 #### Parameters:
 
@@ -47,6 +47,7 @@ Name | Type |
 
 *Inherited from [FetchError](fetcherror.md).[message](fetcherror.md#message)*
 
+*Defined in node_modules/typescript/lib/lib.es5.d.ts:974*
 
 ___
 
@@ -56,6 +57,7 @@ ___
 
 *Inherited from [FetchError](fetcherror.md).[name](fetcherror.md#name)*
 
+*Defined in node_modules/typescript/lib/lib.es5.d.ts:973*
 
 ___
 
@@ -65,3 +67,4 @@ ___
 
 *Inherited from [FetchError](fetcherror.md).[stack](fetcherror.md#stack)*
 
+*Defined in node_modules/typescript/lib/lib.es5.d.ts:975*

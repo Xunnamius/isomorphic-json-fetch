@@ -4,9 +4,9 @@
 
 I love [unfetch](https://github.com/developit/unfetch) ~~mostly because it
 reminds me of my dog~~ because it's such a lightweight no-nonsense fetch
-library. This package is a small wrapper around (isomorphic) unfetch geared
-specifically for fetching JSON and easily sharing configuration across the
-application. Specifically:
+library. This package is a small wrapper around unfetch geared specifically for
+fetching JSON and easily sharing configuration across the application.
+Specifically:
 
 + `content-type` header is set to `application/json`
 + Default method is `POST`
@@ -38,11 +38,9 @@ const configuration = { ... };
 const { json: myData } = await fetch(URL, configuration);
 ```
 
-See [unfetch](https://github.com/developit/unfetch#api) (technically
-[isomorphic-unfetch](https://www.npmjs.com/package/isomorphic-unfetch)) for
-possible configuration values. Additionally, you can add `rejects: true` to your
-config to cause the promise returned by `fetch()` to reject on non-2xx HTTP
-responses.
+See [unfetch](https://github.com/developit/unfetch#api) for possible
+configuration values. Additionally, you can add `rejects: true` to your config
+to cause the promise returned by `fetch()` to reject on non-2xx HTTP responses.
 
 Or, if you're using `fetch()` across many files in a complex project:
 

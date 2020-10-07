@@ -1,6 +1,6 @@
 {
   "name": "isomorphic-json-fetch",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A small wrapper around (isomorphic un)fetch geared specifically for handling JSON app-wide",
   "keywords": [
     "isomorphic",
@@ -25,8 +25,8 @@
     "/README.md"
   ],
   "scripts": {
-    "build": "npm run clean && tsc --project tsconfig.types.json && NODE_ENV=production webpack -p && babel src --extensions .ts --out-dir dist/modules",
-    "build-docs": "rm -rf docs && npx -p typescript -p typedoc@0.17.0-3 -p typedoc-plugin-markdown typedoc --plugin typedoc-plugin-markdown --out docs --readme none --mode library src/index.ts && find docs -name '*.md' -exec sed -i -e 's/`__namedParameters`: //g' {} + && find docs -name '*.md' -exec sed -i -e 's/__namedParameters/\\(destructured\\)/g' {} + && find docs -name '*.md' -exec sed -i '/_npx/d' {} + && sed -i -e 1,4d docs/README.md",
+    "build": "npm run clean && tsc --project tsconfig.types.json && NODE_ENV=production webpack -p && babel src --extensions .ts --out-dir dist/modules && { echo -n '\"undefined\"!=typeof window&&(window.global=window);'; cat dist/umd.js; } > dist/umd.js-tmp && mv -f dist/umd.js-tmp dist/umd.js",
+    "build-docs": "rm -rf docs && typedoc --plugin typedoc-plugin-markdown --out docs --readme none --mode library src/index.ts && find docs -name '*.md' -exec sed -i -e 's/`__namedParameters`: //g' {} + && find docs -name '*.md' -exec sed -i -e 's/__namedParameters/\\(destructured\\)/g' {} + && sed -i -e 1,4d docs/README.md",
     "check-types": "command -v unbuffer >/dev/null && (unbuffer tsc; unbuffer eslint .) | less -R -FX || (tsc; eslint .)",
     "clean": "rm -rf dist",
     "list-tasks": "npm run",
@@ -37,7 +37,7 @@
   },
   "dependencies": {
     "isomorphic-unfetch": "^3.1.0",
-    "named-app-errors": "^1.0.4"
+    "named-app-errors": "^1.0.5"
   },
   "devDependencies": {
     "@babel/cli": "^7.11.6",
@@ -53,6 +53,7 @@
     "@babel/plugin-proposal-throw-expressions": "^7.10.4",
     "@babel/preset-env": "^7.11.5",
     "@babel/preset-typescript": "^7.10.4",
+    "@ergodark/types": "^1.0.14",
     "@types/confusing-browser-globals": "^1.0.0",
     "@types/jest": "^26.0.14",
     "@types/node": "^14.11.2",
@@ -75,6 +76,8 @@
     "jest-extended": "^0.11.5",
     "source-map-support": "^0.5.19",
     "test-listen": "^1.1.0",
+    "typedoc": "^0.17.0-3",
+    "typedoc-plugin-markdown": "^3.0.7",
     "typescript": "^4.0.3",
     "webpack": "^4.44.2",
     "webpack-cli": "^3.3.12"
