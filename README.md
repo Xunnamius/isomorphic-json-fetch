@@ -1,12 +1,11 @@
-[![npm version](https://badge.fury.io/js/isomorphic-json-fetch.svg)](https://badge.fury.io/js/isomorphic-json-fetch)
+[![npm version](https://badge.fury.io/js/isomorphic-json-fetch.svg)](https://badge.fury.io/js/isomorphic-json-fetch) [![#BlackLivesMatter!](https://img.shields.io/badge/Black%20Lives-Matter-lightgrey)](https://m4bl.org/take-action)
 
 # isomorphic-json-fetch 🐕🐕🐕
 
 I love [unfetch](https://github.com/developit/unfetch) ~~mostly because it
 reminds me of my dog~~ because it's such a lightweight no-nonsense fetch
 library. This package is a small wrapper around unfetch geared specifically for
-fetching JSON and easily sharing configuration across the application.
-Specifically:
+fetching JSON and sharing configuration across the application. Specifically:
 
 + `content-type` header is set to `application/json`
 + Default method is `POST`
@@ -14,6 +13,7 @@ Specifically:
 + Request bodies can be objects and will be stringified with `JSON.stringify`
 + Response bodies are automatically parsed with `JSON.parse`
 + `fetch()` will not reject if a non-ok response is received (configurable)
++ Exports functions to get and set app-wide configuration
 
 Useful as a quick little fetcher for [SWR](https://www.npmjs.com/package/swr),
 in React apps, or any time you need to fetch some JSON.
@@ -34,7 +34,7 @@ npm install isomorphic-json-fetch
 ```TypeScript
 import { fetch } from 'isomorphic-json-fetch'
 
-const configuration = { ... };
+const configuration = { ... }; // This can also be set globally, see docs/
 const { json: myData } = await fetch(URL, configuration);
 ```
 
@@ -93,11 +93,15 @@ Documentation can be found under [`docs/`](docs/README.md) and can be built with
 
 ## Contributing
 
-Issues and pull requests are welcome! In lieu of a formal styleguide, take care
-to maintain the existing coding style.
+**Issues and pull requests are always welcome and greatly appreciated!** If you
+submit a pull request, take care to maintain the existing coding style and add
+unit tests for any new or changed functionality. Please lint and test your code,
+of course!
 
-Add unit tests for any new or changed functionality. Please lint and test your
-code!
+Note that using the NPM run scripts to build the documentation and
+distributables requires a linux-like development environment. None of the run
+scripts are likely to work on non-POSIX environments. If you're on Windows, use
+[WSL](https://docs.microsoft.com/en-us/windows/wsl/install-win10).
 
 ## Release History
 
