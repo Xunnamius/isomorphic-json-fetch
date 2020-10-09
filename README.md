@@ -1,4 +1,12 @@
-[![npm version](https://badge.fury.io/js/isomorphic-json-fetch.svg)](https://badge.fury.io/js/isomorphic-json-fetch) [![#BlackLivesMatter!](https://img.shields.io/badge/Black%20Lives-Matter-lightgrey)](https://m4bl.org/take-action)
+[![Join the movement!](https://img.shields.io/badge/black%20lives-matter-lightgrey?color=black&labelColor=white)](https://m4bl.org/take-action)
+[![View this project on GitHub](https://img.shields.io/maintenance/active/2020)](https://www.npmjs.com/package/isomorphic-json-fetch)
+[![View this project on GitHub](https://img.shields.io/github/last-commit/xunnamius/isomorphic-json-fetch/develop)](https://www.npmjs.com/package/isomorphic-json-fetch)
+[![View this project's open issues on GitHub](https://img.shields.io/github/issues/xunnamius/isomorphic-json-fetch)](https://www.npmjs.com/package/isomorphic-json-fetch)
+[![View this project's open pull requests on GitHub](https://img.shields.io/github/issues-pr/xunnamius/isomorphic-json-fetch)](https://www.npmjs.com/package/isomorphic-json-fetch)
+[![View the status of this project's dependencies on DavidDM](https://img.shields.io/david/xunnamius/isomorphic-json-fetch)](https://david-dm.org/xunnamius/isomorphic-json-fetch)
+[![View this project's dependabot activity on GitHub](https://badgen.net/dependabot/xunnamius/isomorphic-json-fetch?label=dependabot)](https://www.npmjs.com/package/isomorphic-json-fetch)
+[![View this project on NPM](https://img.shields.io/npm/v/isomorphic-json-fetch)](https://www.npmjs.com/package/isomorphic-json-fetch)
+[![View this project on NPM](https://img.shields.io/npm/l/isomorphic-json-fetch)](https://www.npmjs.com/package/isomorphic-json-fetch)
 
 # isomorphic-json-fetch 🐕🐕🐕
 
@@ -22,8 +30,9 @@ This package includes TypeScript types and provides:
 
 + A UMD bundle (available in browsers and node via `require`, without
   [tree-shaking](https://webpack.js.org/guides/tree-shaking/) support)
-+ ES2015 modules (available with ES2015 support via `import`, with no side-effects
-  [tree-shaking](https://webpack.js.org/guides/tree-shaking/) support)
++ ES2015 modules (available with ES2015 support via `import`, with [no
+  side-effects tree-shaking](https://webpack.js.org/guides/tree-shaking/)
+  support)
 
 ## Install
 
@@ -43,8 +52,15 @@ const { json: myData } = await fetch(URL, configuration);
 See [unfetch](https://github.com/developit/unfetch#api) for possible
 configuration values. Additionally, you can add `rejects: true` to your config
 to cause the promise returned by `fetch()` to reject on non-2xx HTTP responses.
+By default, the promise returned by `fetch()` won't reject on HTTP error status
+even if the response is an HTTP 404 or 500. Instead, it will resolve normally,
+and it will only reject on network failure or if anything prevented the request
+from completing. See [the unfetch
+docs](https://github.com/developit/unfetch#caveats) for more information.
 
-Or, if you're using `fetch()` across many files in a complex project:
+If you're using `fetch()` across many files in a more complex project, you can
+set a global configuration once and it will be used by all `fetch()` calls
+automatically:
 
 ```TypeScript
 // ! src/app-main-file.ts (this file is executed first)
@@ -52,9 +68,9 @@ import { fetch, setGlobalFetchConfig } from 'isomorphic-json-fetch'
 
 // This sets a new default configuration object for all fetch calls
 setGlobalFetchConfig({
-    method: 'POST', // ? POST is the default
+    method: 'GET', // ? POST is the default
     credentials: 'include', // ? 'same-origin' by default (i.e. no cookies sent!)
-    headers: { 'Content-Type': 'application/json' }, // this is included by default
+    //headers: { 'Content-Type': 'application/json' }, // this is included by default so no need to add it yourself!
 });
 
 // Uses the new global config
@@ -95,15 +111,25 @@ Documentation can be found under [`docs/`](docs/README.md) and can be built with
 
 ## Contributing
 
-**Issues and pull requests are always welcome and greatly appreciated!** If you
-submit a pull request, take care to maintain the existing coding style and add
-unit tests for any new or changed functionality. Please lint and test your code,
-of course!
+**New issues and pull requests are always welcome and greatly appreciated!** If
+you submit a pull request, take care to maintain the existing coding style and
+add unit tests for any new or changed functionality. Please lint and test your
+code, of course!
+
+Use `npm run build` to compile `src/` into `dist/`, which is what makes it into
+the published package. Use `npm run build-docs` to re-build the documentation.
+Use `npm test` to run the unit tests, `npm run check-build` to run the e2e
+tests, and `check-types` to run a type check. Use `npm run list-tasks` to list
+all available run scripts.
 
 Note that using the NPM run scripts to build the documentation and
 distributables requires a linux-like development environment. None of the run
 scripts are likely to work on non-POSIX environments. If you're on Windows, use
 [WSL](https://docs.microsoft.com/en-us/windows/wsl/install-win10).
+
+This package is published using
+[publish-please](https://www.npmjs.com/package/publish-please) via `npx
+publish-please`.
 
 ## Release History
 

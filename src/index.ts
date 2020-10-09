@@ -1,15 +1,13 @@
 import unfetch from 'isomorphic-unfetch'
 import { FetchError } from 'named-app-errors'
 
-import type { FetchConfig } from './types'
-
 /**
  * The default `config` all fetch() calls use by default. Will be merged
  * (overridden) with the `config` object passed into each call to fetch(), if
  * provided. See [unfetch](https://github.com/developit/unfetch) for valid
  * config keys.
  */
-let globalFetchConfig: FetchConfig = {
+let globalFetchConfig: Omit<RequestInit, 'body'> & { rejects?: boolean, body?: Record<string, unknown> } = {
     method: 'POST',
     // credentials: 'include', // ? If you want to send and receive cookies
     headers: { 'Content-Type': 'application/json' },
@@ -19,7 +17,6 @@ let globalFetchConfig: FetchConfig = {
  * Re-export these
  */
 export { FetchError };
-export * from './types';
 
 /**
  * Get the default config object merged in during all fetch() calls.
@@ -31,7 +28,7 @@ export function getGlobalFetchConfig() {
 /**
  * Set the default config object merged in during all fetch() calls.
  */
-export function setGlobalFetchConfig(config: FetchConfig) {
+export function setGlobalFetchConfig(config: typeof globalFetchConfig) {
     globalFetchConfig = config;
 }
 
@@ -42,7 +39,7 @@ export function setGlobalFetchConfig(config: FetchConfig) {
  *
  * Returns an HTTP Response object and the response body data.
  */
-export async function fetch(url: string, config?: FetchConfig) {
+export async function fetch(url: string, config?: typeof globalFetchConfig) {
     const parsedOptions: RequestInit = {
         ...getGlobalFetchConfig(),
         ...config,
@@ -50,7 +47,7 @@ export async function fetch(url: string, config?: FetchConfig) {
     };
 
     const res = await unfetch(url, parsedOptions);
-    let json: unknown;
+    let json: Record<string, unknown> = {};
 
     try { json = (await res.json()) || {}; }
     catch(err) { if(res.ok) throw err; }
@@ -64,17 +61,17 @@ export async function fetch(url: string, config?: FetchConfig) {
 /**
  * Syntactic sugar for calling `fetch(..., { method: 'GET', ... })`.
  */
-fetch.get = (url: string, options?: FetchConfig) => fetch(url, { method: 'GET', ...options });
+fetch.get = (url: string, options?: typeof globalFetchConfig) => fetch(url, { method: 'GET', ...options });
 
 /**
  * Syntactic sugar for calling `fetch(..., { method: 'PUT', ... })`.
  */
-fetch.put = (url: string, options?: FetchConfig) => fetch(url, { method: 'PUT', ...options });
+fetch.put = (url: string, options?: typeof globalFetchConfig) => fetch(url, { method: 'PUT', ...options });
 
 /**
  * Syntactic sugar for calling `fetch(..., { method: 'DELETE', ... })`.
  */
-fetch.delete = (url: string, options?: FetchConfig) => fetch(url, { method: 'DELETE', ...options });
+fetch.delete = (url: string, options?: typeof globalFetchConfig) => fetch(url, { method: 'DELETE', ...options });
 
 /**
  * Syntactic sugar for calling `fetch(..., { method: 'POST', ... })`.

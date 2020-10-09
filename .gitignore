@@ -3,3 +3,6 @@
 /dist
 /coverage
 /npm.pipe
+/tmp-docs
+/tmp-docs-diff
+/docs-diff
