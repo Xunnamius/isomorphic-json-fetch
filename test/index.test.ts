@@ -9,7 +9,7 @@ import { createServer } from 'http'
 
 import type { IncomingMessage, ServerResponse } from 'http'
 
-const withTestServer = async (
+const unitServer = async (
     code: number,
     fn: (url: string) => Promise<void>,
     sfn?: (req: IncomingMessage, res: ServerResponse) => void
@@ -30,12 +30,12 @@ const withTestServer = async (
     }
 };
 
-describe('quick-fetch', () => {
+describe('isomorphic-json-fetch', () => {
     describe('::fetch', () => {
         it('fetches from a server as expected', async () => {
             expect.hasAssertions();
 
-            await withTestServer(200, async (url) => {
+            await unitServer(200, async (url) => {
                 expect((await fetch(url)).json).toStrictEqual({ method: 'POST'});
             });
         });
@@ -43,19 +43,19 @@ describe('quick-fetch', () => {
         it("rejects with FetchError if non-2xx & rejects=true; doesn't if rejects=false", async () => {
             expect.hasAssertions();
 
-            await withTestServer(299, async (url) => {
+            await unitServer(299, async (url) => {
                 expect((await fetch(url)).json).toStrictEqual({ method: 'POST'});
             });
 
-            await withTestServer(404, async (url) => {
+            await unitServer(404, async (url) => {
                 expect((await fetch(url)).json).toStrictEqual({ method: 'POST'});
             });
 
-            await withTestServer(404, async (url) => {
+            await unitServer(404, async (url) => {
                 expect((await fetch(url, { rejects: false })).json).toStrictEqual({ method: 'POST'});
             });
 
-            await withTestServer(404, async (url) => {
+            await unitServer(404, async (url) => {
                 await expect(fetch(url, { rejects: true })).toReject();
             });
         });
@@ -63,7 +63,7 @@ describe('quick-fetch', () => {
         it('rejects if bad JSON request body', async () => {
             expect.hasAssertions();
 
-            await withTestServer(200, async (url) => {
+            await unitServer(200, async (url) => {
                 const fakeObj = BigInt(100) as unknown as Record<string, unknown>;
                 await expect(fetch(url, { body: fakeObj })).toReject();
             });
@@ -72,15 +72,15 @@ describe('quick-fetch', () => {
         it('rejects if bad JSON response body', async () => {
             expect.hasAssertions();
 
-            await withTestServer(200, async (url) => {
+            await unitServer(200, async (url) => {
                 await expect(fetch(url)).toReject();
-            }, (req, res) => res.end('{"broken":"json"'));
+            }, (_, res) => res.end('{"broken":"json"'));
         });
 
         it('returns a ServerResponse instance and a JSON object', async () => {
             expect.hasAssertions();
 
-            await withTestServer(200, async (url) => {
+            await unitServer(200, async (url) => {
                 const { res, json, ...rest } = await fetch(url);
 
                 expect(res).toBeDefined();
@@ -92,7 +92,7 @@ describe('quick-fetch', () => {
         it('sugar methods work as expected', async () => {
             expect.hasAssertions();
 
-            await withTestServer(200, async (url) => {
+            await unitServer(200, async (url) => {
                 const { json: j1 } = await fetch.get(url);
                 const { json: j2 } = await fetch.post(url);
                 const { json: j3 } = await fetch.put(url);
@@ -113,7 +113,7 @@ describe('quick-fetch', () => {
             const newConfig = { method: 'PUT' };
             setGlobalFetchConfig(newConfig);
 
-            await withTestServer(200, async (url) => {
+            await unitServer(200, async (url) => {
                 expect((await fetch(url)).json).toStrictEqual({ method: 'PUT'});
             });
         });

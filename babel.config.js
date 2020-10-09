@@ -32,7 +32,8 @@ module.exports = {
         production: {
             presets: [
                 ['@babel/preset-env', { targets: targets }],
-                ['@babel/preset-typescript', { allowDeclareFields: true }]
+                ['@babel/preset-typescript', { allowDeclareFields: true }],
+                ['minify'],
             ]
         },
     }

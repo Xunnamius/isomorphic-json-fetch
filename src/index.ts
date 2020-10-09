@@ -44,7 +44,7 @@ export function setGlobalFetchConfig(config: FetchConfig) {
  */
 export async function fetch(url: string, config?: FetchConfig) {
     const parsedOptions: RequestInit = {
-        ...globalFetchConfig,
+        ...getGlobalFetchConfig(),
         ...config,
         body: config?.body ? JSON.stringify(config.body) : undefined
     };

@@ -1,7 +1,7 @@
 {
   "name": "isomorphic-json-fetch",
-  "version": "1.0.2",
-  "description": "A small wrapper around (isomorphic un)fetch geared specifically for handling JSON app-wide",
+  "version": "1.0.3",
+  "description": "A small wrapper around (isomorphic) unfetch geared specifically for handling JSON app-wide",
   "keywords": [
     "isomorphic",
     "json",
@@ -27,13 +27,15 @@
   "scripts": {
     "build": "npm run clean && tsc --project tsconfig.types.json && NODE_ENV=production webpack -p && babel src --extensions .ts --out-dir dist/modules && { echo -n '\"undefined\"!=typeof window&&(window.global=window);'; cat dist/umd.js; } > dist/umd.js-tmp && mv -f dist/umd.js-tmp dist/umd.js",
     "build-docs": "rm -rf docs && typedoc --plugin typedoc-plugin-markdown --out docs --readme none --mode library src/index.ts && find docs -name '*.md' -exec sed -i -e 's/`__namedParameters`: //g' {} + && find docs -name '*.md' -exec sed -i -e 's/__namedParameters/\\(destructured\\)/g' {} + && sed -i -e 1,4d docs/README.md",
-    "check-types": "command -v unbuffer >/dev/null && (unbuffer tsc; unbuffer eslint .) | less -R -FX || (tsc; eslint .)",
-    "clean": "rm -rf dist",
+    "check-build": "BABEL_ENV=test jest test/integration.test.ts",
+    "check-types": "rm -f npm.pipe; touch npm.pipe; command -v unbuffer >/dev/null; X=$?; [ $X -eq 0 ] && unbuffer tsc >> npm.pipe; Y=$?; [ $Y -eq 0 ] && echo >> npm.pipe; unbuffer eslint . >> npm.pipe; Z=$?; [ $X -ne 0 ] && tsc >> npm.pipe && eslint . >> npm.pipe; cat npm.pipe | less -R -FX; rm npm.pipe; [ $X -ne 0 ] && [ $? -eq 0 ] || [ $Y -eq 0 ] && [ $Z -eq 0 ]",
+    "clean": "rm -rf dist rm -f npm.pipe",
     "list-tasks": "npm run",
-    "prepublishOnly": "npm test && npm run build",
+    "prepublishOnly": "npm run build",
     "postpublish": "npm run clean",
+    "publishGuard": "npm run check-types && npm run test && npm run build && npm run check-build",
     "repl": "command -v rlwrap >/dev/null && rlwrap npx -p @babel/core -p @babel/node babel-node",
-    "test": "BABEL_ENV=test jest"
+    "test": "BABEL_ENV=test jest --coverage --testPathIgnorePatterns=test/integration.test.ts"
   },
   "dependencies": {
     "isomorphic-unfetch": "^3.1.0",
@@ -55,8 +57,11 @@
     "@babel/preset-typescript": "^7.10.4",
     "@ergodark/types": "^1.0.14",
     "@types/confusing-browser-globals": "^1.0.0",
+    "@types/expect-puppeteer": "^4.4.3",
     "@types/jest": "^26.0.14",
     "@types/node": "^14.11.2",
+    "@types/puppeteer": "^3.0.2",
+    "@types/test-listen": "^1.1.0",
     "@types/webpack": "^4.41.22",
     "@typescript-eslint/eslint-plugin": "^4.3.0",
     "@typescript-eslint/parser": "^4.3.0",
@@ -64,6 +69,7 @@
     "babel-jest": "^26.3.0",
     "babel-loader": "^8.1.0",
     "babel-plugin-source-map-support": "^2.1.3",
+    "babel-preset-minify": "^0.5.1",
     "confusing-browser-globals": "^1.0.9",
     "eslint": "^7.10.0",
     "eslint-import-resolver-alias": "^1.1.2",
@@ -74,6 +80,7 @@
     "jest": "^26.4.2",
     "jest-circus": "^26.4.2",
     "jest-extended": "^0.11.5",
+    "puppeteer": "^5.3.1",
     "source-map-support": "^0.5.19",
     "test-listen": "^1.1.0",
     "typedoc": "^0.17.0-3",
