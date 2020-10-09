@@ -36,5 +36,11 @@ module.exports = {
                 ['minify'],
             ]
         },
+        development: {
+            presets: [
+                ['@babel/preset-env', { targets: targets }],
+                ['@babel/preset-typescript', { allowDeclareFields: true }],
+            ]
+        },
     }
 };

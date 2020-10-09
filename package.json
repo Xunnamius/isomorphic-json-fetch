@@ -1,6 +1,6 @@
 {
   "name": "isomorphic-json-fetch",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "A small wrapper around (isomorphic) unfetch geared specifically for handling JSON app-wide",
   "keywords": [
     "isomorphic",
@@ -25,7 +25,7 @@
     "/README.md"
   ],
   "scripts": {
-    "build": "npm run clean && tsc --project tsconfig.types.json && NODE_ENV=production webpack -p && babel src --extensions .ts --out-dir dist/modules && { echo -n '\"undefined\"!=typeof window&&(window.global=window);'; cat dist/umd.js; } > dist/umd.js-tmp && mv -f dist/umd.js-tmp dist/umd.js",
+    "build": "npm run clean && NODE_ENV=production tsc --project tsconfig.types.json && NODE_ENV=production webpack -p && NODE_ENV=production babel src --extensions .ts --out-dir dist/modules && { echo -n '\"undefined\"!=typeof window&&(window.global=window);'; cat dist/umd.js; } > dist/umd.js-tmp && mv -f dist/umd.js-tmp dist/umd.js",
     "build-docs": "rm -rf docs && typedoc --plugin typedoc-plugin-markdown --out docs --readme none --mode library src/index.ts && find docs -name '*.md' -exec sed -i -e 's/`__namedParameters`: //g' {} + && find docs -name '*.md' -exec sed -i -e 's/__namedParameters/\\(destructured\\)/g' {} + && sed -i -e 1,4d docs/README.md",
     "check-build": "BABEL_ENV=test jest test/integration.test.ts",
     "check-types": "rm -f npm.pipe; touch npm.pipe; command -v unbuffer >/dev/null; X=$?; [ $X -eq 0 ] && unbuffer tsc >> npm.pipe; Y=$?; [ $Y -eq 0 ] && echo >> npm.pipe; unbuffer eslint . >> npm.pipe; Z=$?; [ $X -ne 0 ] && tsc >> npm.pipe && eslint . >> npm.pipe; cat npm.pipe | less -R -FX; rm npm.pipe; [ $X -ne 0 ] && [ $? -eq 0 ] || [ $Y -eq 0 ] && [ $Z -eq 0 ]",

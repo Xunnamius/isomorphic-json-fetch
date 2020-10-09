@@ -37,7 +37,7 @@ export function setGlobalFetchConfig(config: FetchConfig) {
 
 /**
  * Performs an isomorphic (un)fetch. Throws when parsing the body for JSON
- * content fails or when `config = {rejects: true}` and a non-ok response is
+ * content fails or when `config = { rejects: true }` and a non-ok response is
  * received.
  *
  * Returns an HTTP Response object and the response body data.
