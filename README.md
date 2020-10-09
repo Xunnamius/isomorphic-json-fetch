@@ -20,8 +20,10 @@ in React apps, or any time you need to fetch some JSON.
 
 This package includes TypeScript types and provides:
 
-+ A UMD/CJS/AMD bundle (no tree-shaking)
-+ ES2015 modules (tree-shaking)
++ A UMD bundle (available in browsers and node via `require`, without
+  [tree-shaking](https://webpack.js.org/guides/tree-shaking/) support)
++ ES2015 modules (available with ES2015 support via `import`, with no side-effects
+  [tree-shaking](https://webpack.js.org/guides/tree-shaking/) support)
 
 ## Install
 
@@ -34,7 +36,7 @@ npm install isomorphic-json-fetch
 ```TypeScript
 import { fetch } from 'isomorphic-json-fetch'
 
-const configuration = { ... }; // This can also be set globally, see docs/
+const configuration = { ... }; // This can also be set globally; see docs/
 const { json: myData } = await fetch(URL, configuration);
 ```
 
