@@ -104,6 +104,10 @@ let { json } = await fetch('/api/different-endpoint');
 
 // If you're cool enough to be using TypeScript, you can define your return type
 { json } = await fetch<{ expected?: 'value' | 'eulav' }>('/api/that-endpoint');
+
+// Also, if you want to use the normal unfetch/node-fetch, it can be imported
+// via `unfetch`
+import { fetch, unfetch } from 'isomorphic-json-fetch'
 ```
 
 Instead of passing method choice through a configuration option, this package

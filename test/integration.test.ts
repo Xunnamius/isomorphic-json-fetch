@@ -82,7 +82,8 @@ describe('[INTEGRATION] isomorphic-json-fetch', () => {
                         'FetchError',
                         'getGlobalFetchConfig',
                         'setGlobalFetchConfig',
-                        'fetch'
+                        'fetch',
+                        'unfetch',
                     ]);
                 }
             });
@@ -125,6 +126,7 @@ describe('[INTEGRATION] isomorphic-json-fetch', () => {
                 getGlobalFetchConfig,
                 setGlobalFetchConfig,
                 fetch,
+                unfetch,
                 ...rest
             } = await import(`${__dirname}/../${main}`);
 
@@ -132,6 +134,7 @@ describe('[INTEGRATION] isomorphic-json-fetch', () => {
             expect(getGlobalFetchConfig).toBeDefined();
             expect(setGlobalFetchConfig).toBeDefined();
             expect(fetch).toBeDefined();
+            expect(unfetch).toBeDefined();
             expect(rest).toBeEmpty();
         });
 

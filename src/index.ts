@@ -23,6 +23,7 @@ let globalFetchConfig: Omit<RequestInit, 'body'> & {
  * Re-export these
  */
 export { FetchError };
+export { unfetch };
 
 /**
  * Get the default config object merged in during all fetch() calls.
