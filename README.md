@@ -63,7 +63,8 @@ set a global configuration once and it will be used by all `fetch()` calls
 automatically:
 
 ```TypeScript
-// ! src/app-main-file.ts (this file is executed first)
+// ---! src/app-main-file.ts (this file is executed first) !---
+
 import { fetch, setGlobalFetchConfig } from 'isomorphic-json-fetch'
 
 // This sets a new default configuration object for all fetch calls
@@ -74,22 +75,35 @@ setGlobalFetchConfig({
 });
 
 // Uses the new global config
-const { json } = await fetch('/api/endpoint');
+const { json } = await fetch('/api/this-endpoint');
+
 // ...
 
-// ! src/some-other-file.ts
+
+
+// ---! src/some-other-file.ts !---
+
 import { fetch } from 'isomorphic-json-fetch'
 
 // Also uses the global config set in app-main-file.ts
-const { json } = await fetch('/api/different-endpoint');
+let { json } = await fetch('/api/different-endpoint');
 
 // You can always supersede default and global config by providing your own. The
 // following example overrides the globally configured request method
-const { json } = await fetch('/api/yet-another-endpoint', {
+{ json } = await fetch('/api/yet-another-endpoint', {
     method: 'GET',
     // `headers` and `credentials` keys were not overridden, so their values are
     // inherited from global config like normal
 });
+
+// This will ignore any errors thrown by `JSON.parse()` (`{}` is returned)
+{ json } = await fetch('/api/more-endpoints', { method: 'GET', ignoreParseErrors: true });
+
+// This will cause fetch to throw whenever the status is not between 200-299
+{ json } = await fetch('/api/and-some-more-endpoints', { method: 'GET', rejects: true });
+
+// If you're cool enough to be using TypeScript, you can define your return type
+{ json } = await fetch<{ expected?: 'value' | 'eulav' }>('/api/that-endpoint');
 ```
 
 Instead of passing method choice through a configuration option, this package

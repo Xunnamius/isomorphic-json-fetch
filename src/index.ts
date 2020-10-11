@@ -1,13 +1,19 @@
 import unfetch from 'isomorphic-unfetch'
 import { FetchError } from 'named-app-errors'
 
+import type { SerializedValue } from '@ergodark/types'
+
 /**
  * The default `config` all fetch() calls use by default. Will be merged
  * (overridden) with the `config` object passed into each call to fetch(), if
  * provided. See [unfetch](https://github.com/developit/unfetch) for valid
  * config keys.
  */
-let globalFetchConfig: Omit<RequestInit, 'body'> & { rejects?: boolean, body?: Record<string, unknown> } = {
+let globalFetchConfig: Omit<RequestInit, 'body'> & {
+    rejects?: boolean,
+    ignoreParseErrors?: boolean,
+    body?: Record<string, unknown>
+} = {
     method: 'POST',
     // credentials: 'include', // ? If you want to send and receive cookies
     headers: { 'Content-Type': 'application/json' },
@@ -33,13 +39,13 @@ export function setGlobalFetchConfig(config: typeof globalFetchConfig) {
 }
 
 /**
- * Performs an isomorphic (un)fetch. Throws when parsing the body for JSON
- * content fails or when `config = { rejects: true }` and a non-ok response is
- * received.
+ * Performs an isomorphic (un)fetch. Throws 1) when parsing the body for JSON
+ * content fails and `config != { ignoreParseErrors: true }` or 2) when `config
+ * = { rejects: true }` and a non-2xx response is received.
  *
- * Returns an HTTP Response object and the response body data.
+ * Returns an HTTP Response object `res` and parsed response body `json`.
  */
-export async function fetch(url: string, config?: typeof globalFetchConfig) {
+export async function fetch<JsonType extends SerializedValue>(url: string, config?: typeof globalFetchConfig) {
     const parsedOptions: RequestInit = {
         ...getGlobalFetchConfig(),
         ...config,
@@ -47,10 +53,10 @@ export async function fetch(url: string, config?: typeof globalFetchConfig) {
     };
 
     const res = await unfetch(url, parsedOptions);
-    let json: Record<string, unknown> = {};
+    let json: JsonType | null = null;
 
-    try { json = (await res.json()) || {}; }
-    catch(err) { if(res.ok) throw err; }
+    try { json = (await res.json()) || {} }
+    catch(err) { if(!config?.ignoreParseErrors) throw err; }
 
     if(!res.ok && config?.rejects)
         throw new FetchError(res);
