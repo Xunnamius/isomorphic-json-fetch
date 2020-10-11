@@ -46,7 +46,7 @@ export function setGlobalFetchConfig(config: typeof globalFetchConfig) {
  *
  * Returns an HTTP Response object `res` and parsed response body `json`.
  */
-export async function fetch<JsonType extends SerializedValue>(url: string, config?: typeof globalFetchConfig) {
+export async function fetch<JsonType extends SerializedValue>(url: RequestInfo, config?: typeof globalFetchConfig) {
     const parsedOptions: RequestInit = {
         ...getGlobalFetchConfig(),
         ...config,
@@ -68,17 +68,23 @@ export async function fetch<JsonType extends SerializedValue>(url: string, confi
 /**
  * Syntactic sugar for calling `fetch(..., { method: 'GET', ... })`.
  */
-fetch.get = (url: string, options?: typeof globalFetchConfig) => fetch(url, { method: 'GET', ...options });
+fetch.get = <JsonType extends SerializedValue>(url: RequestInfo, config?: typeof globalFetchConfig) => {
+    return fetch<JsonType>(url, { method: 'GET', ...config });
+};
 
 /**
  * Syntactic sugar for calling `fetch(..., { method: 'PUT', ... })`.
  */
-fetch.put = (url: string, options?: typeof globalFetchConfig) => fetch(url, { method: 'PUT', ...options });
+fetch.put = <JsonType extends SerializedValue>(url: RequestInfo, config?: typeof globalFetchConfig) => {
+    return fetch<JsonType>(url, { method: 'PUT', ...config });
+};
 
 /**
  * Syntactic sugar for calling `fetch(..., { method: 'DELETE', ... })`.
  */
-fetch.delete = (url: string, options?: typeof globalFetchConfig) => fetch(url, { method: 'DELETE', ...options });
+fetch.delete = <JsonType extends SerializedValue>(url: RequestInfo, config?: typeof globalFetchConfig) => {
+    return fetch<JsonType>(url, { method: 'DELETE', ...config });
+};
 
 /**
  * Syntactic sugar for calling `fetch(..., { method: 'POST', ... })`.

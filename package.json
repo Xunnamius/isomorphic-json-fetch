@@ -1,6 +1,6 @@
 {
   "name": "isomorphic-json-fetch",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "A small wrapper around (isomorphic) unfetch geared specifically for handling JSON app-wide",
   "keywords": [
     "isomorphic",
