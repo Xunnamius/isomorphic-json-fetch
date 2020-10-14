@@ -1,9 +1,10 @@
-// This webpack config is used for transpiling source to UMD+ES2015 and
-// depositing bundled output to dist/
+// This webpack config is used for transpiling src/ to UMD+ES2015 and depositing
+// bundled output to dist/
 
 process.env.NODE_ENV = 'production';
 
 module.exports = {
+    name: 'umd',
     target: 'node',
     mode: 'production',
     entry: `${__dirname}/src/index.ts`,

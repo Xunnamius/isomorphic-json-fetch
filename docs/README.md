@@ -1,7 +1,3 @@
-**[isomorphic-json-fetch](README.md)**
-
-> Globals
-
 # isomorphic-json-fetch
 
 ## Index
@@ -24,9 +20,9 @@
 
 ### fetch
 
-▸ **fetch**\<JsonType>(`url`: string, `config?`: *typeof* globalFetchConfig): Promise\<{ json: null \| JsonType ; res: Response  }>
+▸ **fetch**\<JsonType>(`url`: RequestInfo, `config?`: *typeof* globalFetchConfig): Promise\<{ json: null \| JsonType ; res: Response  }>
 
-*Defined in [src/index.ts:49](https://github.com/Xunnamius/isomorphic-json-fetch/blob/b652b36/src/index.ts#L49)*
+*Defined in [src/index.ts:49](https://github.com/Xunnamius/isomorphic-json-fetch/blob/598ecae/src/index.ts#L49)*
 
 Performs an isomorphic (un)fetch. Throws 1) when parsing the body for JSON
 content fails and `config != { ignoreParseErrors: true }` or 2) when `config
@@ -44,7 +40,7 @@ Name | Type |
 
 Name | Type |
 ------ | ------ |
-`url` | string |
+`url` | RequestInfo |
 `config?` | *typeof* globalFetchConfig |
 
 **Returns:** Promise\<{ json: null \| JsonType ; res: Response  }>
@@ -55,7 +51,7 @@ ___
 
 ▸ **getGlobalFetchConfig**(): {} & { body?: Record\<string, unknown> ; ignoreParseErrors?: undefined \| false \| true ; rejects?: undefined \| false \| true  }
 
-*Defined in [src/index.ts:31](https://github.com/Xunnamius/isomorphic-json-fetch/blob/b652b36/src/index.ts#L31)*
+*Defined in [src/index.ts:31](https://github.com/Xunnamius/isomorphic-json-fetch/blob/598ecae/src/index.ts#L31)*
 
 Get the default config object merged in during all fetch() calls.
 
@@ -67,7 +63,7 @@ ___
 
 ▸ **setGlobalFetchConfig**(`config`: *typeof* globalFetchConfig): void
 
-*Defined in [src/index.ts:38](https://github.com/Xunnamius/isomorphic-json-fetch/blob/b652b36/src/index.ts#L38)*
+*Defined in [src/index.ts:38](https://github.com/Xunnamius/isomorphic-json-fetch/blob/598ecae/src/index.ts#L38)*
 
 Set the default config object merged in during all fetch() calls.
 

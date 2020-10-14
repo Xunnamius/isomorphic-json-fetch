@@ -1,10 +1,5 @@
 module.exports = {
-    collectCoverageFrom: [
-        '**/*.ts',
-        '!**/*.d.ts',
-        '!test/**',
-        '!node_modules/**',
-    ],
+    collectCoverageFrom: [ 'src/**/*.ts' ],
     testEnvironment: 'node',
     testRunner: 'jest-circus/runner',
     verbose: false,

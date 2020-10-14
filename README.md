@@ -1,12 +1,11 @@
-[![Join the movement!](https://img.shields.io/badge/black%20lives-matter-lightgrey?color=black&labelColor=white)](https://m4bl.org/take-action)
+[![Join the movement!](https://api.ergodark.com/badges/blm)](https://m4bl.org/take-action)
 [![View this project on GitHub](https://img.shields.io/maintenance/active/2020)](https://www.npmjs.com/package/isomorphic-json-fetch)
 [![View this project on GitHub](https://img.shields.io/github/last-commit/xunnamius/isomorphic-json-fetch/develop)](https://www.npmjs.com/package/isomorphic-json-fetch)
 [![View this project's open issues on GitHub](https://img.shields.io/github/issues/xunnamius/isomorphic-json-fetch)](https://www.npmjs.com/package/isomorphic-json-fetch)
 [![View this project's open pull requests on GitHub](https://img.shields.io/github/issues-pr/xunnamius/isomorphic-json-fetch)](https://www.npmjs.com/package/isomorphic-json-fetch)
 [![View the status of this project's dependencies on DavidDM](https://img.shields.io/david/xunnamius/isomorphic-json-fetch)](https://david-dm.org/xunnamius/isomorphic-json-fetch)
-[![View this project's dependabot activity on GitHub](https://badgen.net/dependabot/xunnamius/isomorphic-json-fetch?label=dependabot)](https://www.npmjs.com/package/isomorphic-json-fetch)
-[![View this project on NPM](https://img.shields.io/npm/v/isomorphic-json-fetch)](https://www.npmjs.com/package/isomorphic-json-fetch)
 [![View this project on NPM](https://img.shields.io/npm/l/isomorphic-json-fetch)](https://www.npmjs.com/package/isomorphic-json-fetch)
+[![View this project on NPM](https://api.ergodark.com/badges/npm-pkg-version/isomorphic-json-fetch)](https://www.npmjs.com/package/isomorphic-json-fetch)
 
 # isomorphic-json-fetch 🐕🐕🐕
 
@@ -40,7 +39,7 @@ This package includes TypeScript types and provides:
 npm install isomorphic-json-fetch
 ```
 
-## Usage
+## Usage and examples
 
 ```TypeScript
 import { fetch } from 'isomorphic-json-fetch'
@@ -90,21 +89,21 @@ let { json } = await fetch('/api/different-endpoint');
 
 // You can always supersede default and global config by providing your own. The
 // following example overrides the globally configured request method
-{ json } = await fetch('/api/yet-another-endpoint', {
+({ json } = await fetch('/api/yet-another-endpoint', {
     method: 'GET',
     // `headers` and `credentials` keys were not overridden, so their values are
     // inherited from global config like normal
-});
+}));
 
 // This will ignore any errors thrown by `JSON.parse()` (`{}` is returned)
-{ json } = await fetch('/api/more-endpoints', { method: 'GET', ignoreParseErrors: true });
+({ json } = await fetch('/api/more-endpoints', { method: 'GET', ignoreParseErrors: true }));
 
 // This will cause fetch to throw whenever the status is not between 200-299
-{ json } = await fetch('/api/and-some-more-endpoints', { method: 'GET', rejects: true });
+({ json } = await fetch('/api/and-some-more-endpoints', { method: 'GET', rejects: true }));
 
 // If you're cool enough to be using TypeScript, you can define your return type
-{ json } = await fetch<{ expected?: 'value' | 'eulav' }>('/api/that-endpoint');
-{ json } = await fetch.get<'this string is technically valid JSON too'>('/api/those-endpoints');
+({ json } = await fetch<{ expected?: 'value' | 'eulav' }>('/api/that-endpoint'));
+({ json } = await fetch.get<'this string is technically valid JSON too'>('/api/those-endpoints'));
 
 // Also, if you want to use the normal unfetch/node-fetch, it can be imported
 // via `unfetch`
@@ -150,6 +149,6 @@ This package is published using
 [publish-please](https://www.npmjs.com/package/publish-please) via `npx
 publish-please`.
 
-## Release History
+## Release history
 
-* 1.0.x Initial release
+See [CHANGELOG.md](CHANGELOG.md).

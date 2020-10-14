@@ -25,7 +25,7 @@ module.exports = {
             sourceMaps: 'both',
             presets: [
                 ['@babel/preset-env', { targets: targets }],
-                ['@babel/preset-typescript', { allowDeclareFields: true }]
+                ['@babel/preset-typescript', { allowDeclareFields: true }],
             ]
         },
         // * Used by `npm run build`
@@ -34,12 +34,6 @@ module.exports = {
                 ['@babel/preset-env', { targets: targets }],
                 ['@babel/preset-typescript', { allowDeclareFields: true }],
                 ['minify'],
-            ]
-        },
-        development: {
-            presets: [
-                ['@babel/preset-env', { targets: targets }],
-                ['@babel/preset-typescript', { allowDeclareFields: true }],
             ]
         },
     }

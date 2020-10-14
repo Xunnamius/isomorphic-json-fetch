@@ -25,9 +25,8 @@
         "resolveJsonModule": true,
         "inlineSourceMap": true
     },
-    "exclude": [
-        "node_modules",
-        "dist"
-    ],
-    "include": [ "**/*.ts" ]
+    "include": [
+        "types/**/*.ts",
+        "src/**/*.ts"
+    ]
 }
