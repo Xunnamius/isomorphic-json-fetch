@@ -1,4 +1,8 @@
 /.vscode
+/build
+/.env
+/external-scripts/bin
+/next-env.d.ts
 /node_modules
 /dist
 /coverage
