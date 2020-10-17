@@ -6,10 +6,6 @@
 
 * [unfetch](modules/unfetch.md)
 
-### Classes
-
-* [FetchError](classes/fetcherror.md)
-
 ### Type aliases
 
 * [FetchConfig](README.md#fetchconfig)
@@ -24,29 +20,44 @@
 
 ### FetchConfig
 
-Ƭ  **FetchConfig**: Omit\<RequestInit, \"body\"> & { body?: Record\<string, unknown> ; ignoreParseErrors?: undefined \| false \| true ; rejects?: undefined \| false \| true  }
+Ƭ  **FetchConfig**: Omit\<RequestInit, \"body\"> & { body?: Record\<string, unknown> ; ignoreParseErrors?: undefined \| false \| true ; rejects?: undefined \| false \| true ; swr?: undefined \| false \| true  }
 
-*Defined in [src/index.ts:6](https://github.com/Xunnamius/isomorphic-json-fetch/blob/7633f88/src/index.ts#L6)*
+*Defined in [src/index.ts:5](https://github.com/Xunnamius/isomorphic-json-fetch/blob/7e60d82/src/index.ts#L5)*
 
 ## Functions
 
 ### fetch
 
-▸ **fetch**\<JsonType>(`url`: RequestInfo, `config?`: [FetchConfig](README.md#fetchconfig)): Promise\<{ json: null \| JsonType ; res: Response  }>
+▸ **fetch**\<JsonType, ErrorType>(`url`: RequestInfo, `config?`: [FetchConfig](README.md#fetchconfig)): Promise\<{ error: undefined \| ErrorType ; json: undefined \| JsonType ; res: Response  }>
 
-*Defined in [src/index.ts:51](https://github.com/Xunnamius/isomorphic-json-fetch/blob/7633f88/src/index.ts#L51)*
+*Defined in [src/index.ts:64](https://github.com/Xunnamius/isomorphic-json-fetch/blob/7e60d82/src/index.ts#L64)*
 
-Performs an isomorphic (un)fetch. Throws 1) when parsing the body for JSON
-content fails and `config != { ignoreParseErrors: true }` or 2) when `config
-= { rejects: true }` and a non-2xx response is received.
+Performs an isomorphic (un)fetch.
 
-Returns an HTTP Response object `res` and parsed response body `json`.
+Throws 1) when parsing the body for JSON content fails and `config != {
+ignoreParseErrors: true }` or 2) when `config = { rejects: true }` and a
+non-2xx response is received. Otherwise, returns an HTTP Response object
+`res` and parsed response body `json` on 2xx response or `error`.
+
+Example:
+```
+  const { json, error } = fetch<{ myData: number }, { message: string }>('api/endpoint', {
+    method: 'POST',
+    body: b
+  });
+
+  ...
+
+  if(error) return error.message;
+  return json.myData + SOME_CONST;
+```
 
 #### Type parameters:
 
 Name | Type |
 ------ | ------ |
 `JsonType` | SerializedValue |
+`ErrorType` | SerializedValue |
 
 #### Parameters:
 
@@ -55,19 +66,19 @@ Name | Type |
 `url` | RequestInfo |
 `config?` | [FetchConfig](README.md#fetchconfig) |
 
-**Returns:** Promise\<{ json: null \| JsonType ; res: Response  }>
+**Returns:** Promise\<{ error: undefined \| ErrorType ; json: undefined \| JsonType ; res: Response  }>
 
 ___
 
 ### getGlobalFetchConfig
 
-▸ **getGlobalFetchConfig**(): {} & { body?: Record\<string, unknown> ; ignoreParseErrors?: undefined \| false \| true ; rejects?: undefined \| false \| true  }
+▸ **getGlobalFetchConfig**(): {} & { body?: Record\<string, unknown> ; ignoreParseErrors?: undefined \| false \| true ; rejects?: undefined \| false \| true ; swr?: undefined \| false \| true  }
 
-*Defined in [src/index.ts:33](https://github.com/Xunnamius/isomorphic-json-fetch/blob/7633f88/src/index.ts#L33)*
+*Defined in [src/index.ts:32](https://github.com/Xunnamius/isomorphic-json-fetch/blob/7e60d82/src/index.ts#L32)*
 
 Get the default config object merged in during all fetch() calls.
 
-**Returns:** {} & { body?: Record\<string, unknown> ; ignoreParseErrors?: undefined \| false \| true ; rejects?: undefined \| false \| true  }
+**Returns:** {} & { body?: Record\<string, unknown> ; ignoreParseErrors?: undefined \| false \| true ; rejects?: undefined \| false \| true ; swr?: undefined \| false \| true  }
 
 ___
 
@@ -75,7 +86,7 @@ ___
 
 ▸ **setGlobalFetchConfig**(`config`: [FetchConfig](README.md#fetchconfig)): void
 
-*Defined in [src/index.ts:40](https://github.com/Xunnamius/isomorphic-json-fetch/blob/7633f88/src/index.ts#L40)*
+*Defined in [src/index.ts:39](https://github.com/Xunnamius/isomorphic-json-fetch/blob/7e60d82/src/index.ts#L39)*
 
 Set the default config object merged in during all fetch() calls.
 

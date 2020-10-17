@@ -4,104 +4,98 @@ import {
     setGlobalFetchConfig
 } from '../src/index'
 
-import listen from 'test-listen'
-import { createServer } from 'http'
+import { unitServer } from './setup'
 
-import type { IncomingMessage, ServerResponse } from 'http'
-
-const unitServer = async (
-    code: number,
-    fn: (url: string) => Promise<void>,
-    sfn?: (req: IncomingMessage, res: ServerResponse) => void
-) => {
-    let server = null;
-
-    try {
-        const url = await listen(server = createServer((req, res) => {
-            res.statusCode = code;
-            (sfn ? sfn : (q: typeof req, s: typeof res) => s.end(JSON.stringify({ method: q.method })))(req, res);
-        }));
-
-        await fn(url);
-    }
-
-    finally {
-        server?.close();
-    }
-};
-
-describe('isomorphic-json-fetch', () => {
+describe('isomorphic-json-fetch [UNIT TESTS]', () => {
     describe('::fetch', () => {
         it('fetches from a server as expected', async () => {
             expect.hasAssertions();
 
-            await unitServer(200, async (url) => {
-                expect((await fetch(url)).json).toStrictEqual({ method: 'POST'});
+            await unitServer({
+                code: 200,
+                client: async ({ url }) => expect((await fetch(url)).json).toStrictEqual({ method: 'POST'})
             });
         });
 
         it("rejects with FetchError if non-2xx & rejects=true; doesn't if rejects=false", async () => {
             expect.hasAssertions();
 
-            await unitServer(299, async (url) => {
-                expect((await fetch(url)).json).toStrictEqual({ method: 'POST'});
+            await unitServer({
+                code: 299,
+                client: async ({ url }) => expect((await fetch(url)).json).toStrictEqual({ method: 'POST'})
             });
 
-            await unitServer(404, async (url) => {
-                expect((await fetch(url)).json).toStrictEqual({ method: 'POST'});
+            await unitServer({
+                code: 404,
+                client: async ({ url }) => expect((await fetch(url)).error).toStrictEqual({ method: 'POST'})
             });
 
-            await unitServer(404, async (url) => {
-                expect((await fetch(url, { rejects: false })).json).toStrictEqual({ method: 'POST'});
+            await unitServer({
+                code: 404,
+                client: async ({ url }) => {
+                    expect((await fetch(url, { rejects: false })).error).toStrictEqual({ method: 'POST'});
+                }
             });
 
-            await unitServer(404, async (url) => {
-                await expect(fetch(url, { rejects: true })).toReject();
+            await unitServer({
+                code: 404,
+                client: async ({ url }) => expect(fetch(url, { rejects: true })).toReject()
             });
         });
 
         it('rejects if bad JSON request body', async () => {
             expect.hasAssertions();
 
-            await unitServer(200, async (url) => {
-                const fakeObj = BigInt(100) as unknown as Record<string, unknown>;
-                await expect(fetch(url, { body: fakeObj })).toReject();
+            await unitServer({
+                code: 200,
+                client: async ({ url }) => {
+                    const fakeObj = BigInt(100) as unknown as Record<string, unknown>;
+                    await expect(fetch(url, { body: fakeObj })).toReject();
+                }
             });
         });
 
         it('rejects if bad JSON response body', async () => {
             expect.hasAssertions();
 
-            await unitServer(200, async (url) => {
-                await expect(fetch(url)).toReject();
-            }, (_, res) => res.end('{"broken":"json"'));
+            await unitServer({
+                code: 200,
+                client: async ({ url }) => expect(fetch(url)).toReject(),
+                server: (_, res) => res.end('{"broken":"json"')
+            });
         });
 
         it('returns a ServerResponse instance and a JSON object', async () => {
             expect.hasAssertions();
 
-            await unitServer(200, async (url) => {
-                const { res, json, ...rest } = await fetch(url);
+            await unitServer({
+                code: 200,
+                client: async ({ url }) => {
+                    const { res, json, ...rest } = await fetch(url);
 
-                expect(res).toBeDefined();
-                expect(json).toBeDefined();
-                expect(rest).toBeEmpty();
+                    expect(res).toBeDefined();
+                    expect(json).toBeDefined();
+                    expect(rest).toBeEmpty();
+                }
             });
         });
 
         it('sugar methods work as expected', async () => {
             expect.hasAssertions();
 
-            await unitServer(200, async (url) => {
-                const { json: j1 } = await fetch.get(url);
-                const { json: j2 } = await fetch.post(url);
-                const { json: j3 } = await fetch.put(url);
-                const { json: j4 } = await fetch.delete(url);
+            await unitServer({
+                code: 200,
+                client: async ({ url }) => {
+                    const { json: j1 } = await fetch.get(url)
+                    const { json: j2 } = await fetch.post(url);
+                    const { json: j3 } = await fetch.put(url);
+                    const { json: j4 } = await fetch.delete(url);
 
-                expect(j1).toStrictEqual({ method: 'GET' });
-                expect(j2).toStrictEqual({ method: 'POST' });
-                expect(j3).toStrictEqual({ method: 'PUT' });
-                expect(j4).toStrictEqual({ method: 'DELETE' });
+                    expect(j1).toStrictEqual({ method: 'GET' });
+                    expect(j2).toStrictEqual({ method: 'POST' });
+                    expect(j3).toStrictEqual({ method: 'PUT' });
+                    expect(j4).toStrictEqual({ method: 'DELETE' });
+                }
             });
         });
     });
@@ -113,8 +107,9 @@ describe('isomorphic-json-fetch', () => {
             const newConfig = { method: 'PUT' };
             setGlobalFetchConfig(newConfig);
 
-            await unitServer(200, async (url) => {
-                expect((await fetch(url)).json).toStrictEqual({ method: 'PUT'});
+            await unitServer({
+                code: 200,
+                client: async ({ url }) => expect((await fetch(url)).json).toStrictEqual({ method: 'PUT'})
             });
         });
     });

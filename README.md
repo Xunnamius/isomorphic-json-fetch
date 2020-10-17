@@ -14,18 +14,22 @@ reminds me of my dog~~ because it's such a lightweight no-nonsense fetch
 library. This package is a small wrapper around unfetch geared specifically for
 fetching JSON and sharing configuration across the application. Specifically:
 
-+ `content-type` header is set to `application/json`
++ Sugar function for simple integration with [SWR](https://www.npmjs.com/package/swr)
 + Default method is `POST`
++ Sugar functions for GET/POST/PUT/DELETE methods
++ `content-type` header is set to `application/json`
 + Cookies are NOT sent along with the rest of the request (configurable)
-+ Request bodies can be objects and will be stringified with `JSON.stringify`
++ Request bodies can be anything serializable and will be stringified with
+  `JSON.stringify`
 + Response bodies are automatically parsed with `JSON.parse`
 + `fetch()` will not reject if a non-ok response is received (configurable)
++ Simple differentiation between 2xx responses and non-2xx non-ok responses
 + Exports functions to get and set app-wide configuration
 
-Useful as a quick little fetcher for [SWR](https://www.npmjs.com/package/swr),
-in React apps, or any time you need to fetch some JSON.
+Useful in React apps, as a quick [SWR](https://www.npmjs.com/package/swr)
+fetcher, or any time your project needs to consume JSON from an API.
 
-This package includes TypeScript types and provides:
+This package includes TypeScript types/generics and provides:
 
 + A UMD bundle (available in browsers and node via `require`, without
   [tree-shaking](https://webpack.js.org/guides/tree-shaking/) support)
@@ -39,14 +43,75 @@ This package includes TypeScript types and provides:
 npm install isomorphic-json-fetch
 ```
 
-## Usage and examples
+## Quick start
 
 ```TypeScript
 import { fetch } from 'isomorphic-json-fetch'
 
-const configuration = { ... }; // This can also be set globally; see docs/
-const { json: myData } = await fetch(URL, configuration);
+const URL = 'api/endpoint';
+let res, json, error;
+
+// 1. With zero configuration
+
+({ json } = await fetch(URL));
+doSomethingWith(json.myData);
+
+// 2. With simple error handling
+
+try {
+    ({ res, json } = await fetch.get<{ myData: number }>(URL));
+
+    if(!json) return handleErr(`response code outside 200-299: ${res.status}`);
+    doSomethingWith(json.myData);
+}
+
+catch(e) {
+    // Could be a JSON parse error or a network issue
+    handleErr(`fetch failed: ${e}`);
+}
+
+// 3. Explicitly capturing JSON from non-2xx responses
+
+const configuration = { // <== this can also be set globally, see below
+    method: 'POST',
+    body: { query: 'some-string' }
+};
+
+try {
+    ({ json, error } = await fetch<{ myData: number }, { message: string }>(URL, configuration));
+
+    if(error) return handleErr(error.message);
+    doSomethingWith(json.myData);
+}
+
+catch(e) {
+    // Could be a JSON parse error or a network issue
+    handleErr(`fetch failed: ${e}`);
+}
+
+// 4. Handling non-2xx responses in your own catch block instead
+
+try { doSomethingWith((await fetch.post<{ myData: number }>(URL, { rejects: true })).json.myData) }
+catch(e) {
+    // ! Could be a JSON parse error or a network issue OR if the
+    // ! status code is not between 200-299!
+    handleErr(`fetch failed: ${e}`);
+}
+
+// 5. As a quick little fetcher for SWR
+
+const { data, error } = useSwr(URL, fetch.swr);
+// Equivalent to the following:
+//                ... = useSwr(URL, (url: string) => fetch(url, { swr: true }));
+
+if(error) return <div>failed to load</div>
+if(!data) return <div>loading...</div>
+return <div>hello #{data.myData}!</div>
+
+// When using SWR, it's best to set fetch configuration globally (below)
 ```
+
+## Usage and examples
 
 See [unfetch](https://github.com/developit/unfetch#api) for possible
 configuration values. Additionally, you can add `rejects: true` to your config
@@ -62,51 +127,38 @@ set a global configuration once and it will be used by all `fetch()` calls
 automatically:
 
 ```TypeScript
-// ---! src/app-main-file.ts (this file is executed first) !---
-
 import { fetch, setGlobalFetchConfig } from 'isomorphic-json-fetch'
+
+const URL = 'api/endpoint';
 
 // This sets a new default configuration object for all fetch calls
 setGlobalFetchConfig({
     method: 'GET', // ? POST is the default
-    credentials: 'include', // ? 'same-origin' by default (i.e. no cookies sent!)
-    //headers: { 'Content-Type': 'application/json' }, // this is included by default so no need to add it yourself!
+    credentials: 'include', // ? 'same-origin' by default (no cookies sent!)
+    // content-type header is included by default so no need to add it yourself!
 });
 
-// Uses the new global config
-const { json } = await fetch('/api/this-endpoint');
+// All the following now use the new global config
 
-// ...
+let { json } = await fetch(URL);
 
-
-
-// ---! src/some-other-file.ts !---
-
-import { fetch } from 'isomorphic-json-fetch'
-
-// Also uses the global config set in app-main-file.ts
-let { json } = await fetch('/api/different-endpoint');
-
-// You can always supersede default and global config by providing your own. The
-// following example overrides the globally configured request method
-({ json } = await fetch('/api/yet-another-endpoint', {
+// You can always override default/global config by providing your own
+({ json } = await fetch(URL, {
     method: 'GET',
     // `headers` and `credentials` keys were not overridden, so their values are
     // inherited from global config like normal
 }));
 
-// This will ignore any errors thrown by `JSON.parse()` (`{}` is returned)
-({ json } = await fetch('/api/more-endpoints', { method: 'GET', ignoreParseErrors: true }));
+// This will ignore any errors thrown by `JSON.parse()`
+({ json } = await fetch(URL, { method: 'GET', ignoreParseErrors: true }));
 
-// This will cause fetch to throw whenever the status is not between 200-299
-({ json } = await fetch('/api/and-some-more-endpoints', { method: 'GET', rejects: true }));
+json === undefined // true
 
-// If you're cool enough to be using TypeScript, you can define your return type
-({ json } = await fetch<{ expected?: 'value' | 'eulav' }>('/api/that-endpoint'));
-({ json } = await fetch.get<'this string is technically valid JSON too'>('/api/those-endpoints'));
+// TypeScript support for defining json return type and error return type
+({ json } = await fetch.get<'technically valid JSON', { error: string }>(URL));
 
-// Also, if you want to use the normal unfetch/node-fetch, it can be imported
-// via `unfetch`
+// Also, if you want to use the normal unfetch/node-fetch isomorphically, it
+// can be imported via `unfetch`
 import { fetch, unfetch } from 'isomorphic-json-fetch'
 ```
 
@@ -116,10 +168,10 @@ provides several sugar functions:
 ```TypeScript
 import { fetch } from 'isomorphic-json-fetch'
 
-const { json: get }  = await fetch.get('/somewhere?something=1');
-const { json: post } = await fetch.post('/somewhere?something=2', { body: { create: true }});
-const { json: put }  = await fetch.put('/somewhere?something=3', { body: { newData: 'yes' }});
-const { json: del }  = await fetch.delete('/somewhere?something=4');
+const { json: get }  = await fetch.get('/app?t=1');
+const { json: post } = await fetch.post('/app?t=2', { body: { create: true }});
+const { json: put }  = await fetch.put('/app?t=3', { body: { newData: 'yes' }});
+const { json: del }  = await fetch.delete('/app?t=4');
 ```
 
 ## Documentation
