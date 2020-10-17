@@ -14,8 +14,7 @@ reminds me of my dog~~ because it's such a lightweight no-nonsense fetch
 library. This package is a small wrapper around unfetch geared specifically for
 fetching JSON and sharing configuration across the application. Specifically:
 
-+ Sugar function for simple integration with [SWR](https://www.npmjs.com/package/swr)
-+ Default method is `POST`
++ Default method is `POST` (unless using SWR)
 + Sugar functions for GET/POST/PUT/DELETE methods
 + `content-type` header is set to `application/json`
 + Cookies are NOT sent along with the rest of the request (configurable)
@@ -25,9 +24,10 @@ fetching JSON and sharing configuration across the application. Specifically:
 + `fetch()` will not reject if a non-ok response is received (configurable)
 + Simple differentiation between 2xx responses and non-2xx non-ok responses
 + Exports functions to get and set app-wide configuration
++ Sugar function for simple integration with
+  [SWR](https://www.npmjs.com/package/swr)
 
-Useful in React apps, as a quick [SWR](https://www.npmjs.com/package/swr)
-fetcher, or any time your project needs to consume JSON from an API.
+Useful any time your project needs to consume JSON from some endpoint.
 
 This package includes TypeScript types/generics and provides:
 
@@ -53,10 +53,10 @@ let res, json, error;
 
 // 1. With zero configuration
 
-({ json } = await fetch(URL));
+({ json } = await fetch(URL)); // <== json will be undefined on non-2xx responses
 doSomethingWith(json.myData);
 
-// 2. With simple error handling
+// 2. With simple error handling and typed JSON
 
 try {
     ({ res, json } = await fetch.get<{ myData: number }>(URL));
@@ -70,9 +70,9 @@ catch(e) {
     handleErr(`fetch failed: ${e}`);
 }
 
-// 3. Explicitly capturing JSON from non-2xx responses
+// 3. Explicitly capturing typed JSON from non-2xx responses (e.g. 404, 500)
 
-const configuration = { // <== this can also be set globally, see below
+const configuration = { // <== any configs can also be set globally, see below
     method: 'POST',
     body: { query: 'some-string' }
 };
@@ -80,6 +80,7 @@ const configuration = { // <== this can also be set globally, see below
 try {
     ({ json, error } = await fetch<{ myData: number }, { message: string }>(URL, configuration));
 
+    // error is undefined on 2xx responses; json is undefined on non-2xx responses
     if(error) return handleErr(error.message);
     doSomethingWith(json.myData);
 }
@@ -89,7 +90,7 @@ catch(e) {
     handleErr(`fetch failed: ${e}`);
 }
 
-// 4. Handling non-2xx responses in your own catch block instead
+// 4. Handling non-2xx responses as exceptions in your own catch block instead
 
 try { doSomethingWith((await fetch.post<{ myData: number }>(URL, { rejects: true })).json.myData) }
 catch(e) {
@@ -111,7 +112,7 @@ return <div>hello #{data.myData}!</div>
 // When using SWR, it's best to set fetch configuration globally (below)
 ```
 
-## Usage and examples
+## Advanced usage
 
 See [unfetch](https://github.com/developit/unfetch#api) for possible
 configuration values. Additionally, you can add `rejects: true` to your config
@@ -121,6 +122,10 @@ even if the response is an HTTP 404 or 500. Instead, it will resolve normally,
 and it will only reject on network failure or if anything prevented the request
 from completing. See [the unfetch
 docs](https://github.com/developit/unfetch#caveats) for more information.
+
+For use with [SWR](https://www.npmjs.com/package/swr), add `swr: true` to your
+config and return a higher order function manually or just use the `fetch.swr`
+sugar (see example above).
 
 If you're using `fetch()` across many files in a more complex project, you can
 set a global configuration once and it will be used by all `fetch()` calls
@@ -133,18 +138,18 @@ const URL = 'api/endpoint';
 
 // This sets a new default configuration object for all fetch calls
 setGlobalFetchConfig({
-    method: 'GET', // ? POST is the default
+    method: 'DELETE', // ? POST is the default
     credentials: 'include', // ? 'same-origin' by default (no cookies sent!)
     // content-type header is included by default so no need to add it yourself!
 });
 
 // All the following now use the new global config
 
-let { json } = await fetch(URL);
+let { json } = await fetch(URL); // <== Sends a DELETE request
 
 // You can always override default/global config by providing your own
-({ json } = await fetch(URL, {
-    method: 'GET',
+({ json } = await fetch(URL, { // <== Sends a PUT request
+    method: 'PUT',
     // `headers` and `credentials` keys were not overridden, so their values are
     // inherited from global config like normal
 }));
@@ -157,8 +162,8 @@ json === undefined // true
 // TypeScript support for defining json return type and error return type
 ({ json } = await fetch.get<'technically valid JSON', { error: string }>(URL));
 
-// Also, if you want to use the normal unfetch/node-fetch isomorphically, it
-// can be imported via `unfetch`
+// Also, if you want to use the normal unfetch/node-fetch isomorphically, like
+// for stream support in Node, it can be imported via `unfetch`
 import { fetch, unfetch } from 'isomorphic-json-fetch'
 ```
 

@@ -1,4 +1,5 @@
 [Upcoming]: https://github.com/Xunnamius/isomorphic-json-fetch/compare/main...develop
+[v1.0.11]: https://github.com/Xunnamius/isomorphic-json-fetch/compare/v1.0.10...v1.0.11
 [v1.0.10]: https://github.com/Xunnamius/isomorphic-json-fetch/compare/v1.0.9...v1.0.10
 [v1.0.9]: https://github.com/Xunnamius/isomorphic-json-fetch/compare/v1.0.8...v1.0.9
 [v1.0.8]: https://github.com/Xunnamius/isomorphic-json-fetch/compare/v1.0.7...v1.0.8
@@ -32,6 +33,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 (no notes yet)
 
 ## Released
+
+### [![v1.0.11](https://api.ergodark.com/badges/github-tag-date/xunnamius/isomorphic-json-fetch/v1.0.11)][v1.0.11]
+#### Changed
+- Added better TypeScript support (isomorphic versions of Request* Types are used now and also exported)
+- Small README.md improvements
+- Updated documentation
 
 ### [![v1.0.10](https://api.ergodark.com/badges/github-tag-date/xunnamius/isomorphic-json-fetch/v1.0.10)][v1.0.10]
 #### Changed

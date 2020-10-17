@@ -18,9 +18,6 @@ const TEST_VAL = 5;
 const TEST_OBJ = JSON.stringify({ myData: TEST_VAL });
 const BAD_STR = '{"bad json":';
 
-// ? To ensure we're demonstrating local destructuring properly
-let res, json;
-
 const clientFactory = async (ex, o) => {
     const d = jest.fn((n: number) => expect(n).toBe(TEST_VAL));
     const e = jest.fn();
@@ -73,8 +70,8 @@ describe('isomorphic-json-fetch [README EXAMPLES]', () => {
 
         await unitServer({
             client: async ({ url: URL }) => {
-                ({ json } = await fetch(URL));
-                d(json.myData);
+                const { json } = await fetch(URL);
+                d(json['myData']);
             },
             server: (_, res) => res.end(TEST_OBJ)
         });
@@ -89,7 +86,7 @@ describe('isomorphic-json-fetch [README EXAMPLES]', () => {
 
         await clientFactory((doSomethingWith, handleErr, handleException) => async ({ url: URL }) => {
             try {
-                ({ res, json } = await fetch.get<{ myData: number }>(URL));
+                const { res, json } = await fetch.get<{ myData: number }>(URL);
 
                 if(!json) return handleErr(`response code outside 200-299: ${res.status}`);
                 doSomethingWith(json.myData);
@@ -196,9 +193,9 @@ describe('isomorphic-json-fetch [README EXAMPLES]', () => {
                 body = TEST_OBJ;
 
                 // TypeScript support for defining json return type and error return type
-                const { json: j2 } = await fetch.get<'technically valid JSON', { error: string }>(URL);
+                ({ json } = await fetch.get<'technically valid JSON', { error: string }>(URL));
 
-                expect(j2).not.toBeUndefined();
+                expect(json).not.toBeUndefined();
             },
             server: (_, res) => res.end(body)
         });

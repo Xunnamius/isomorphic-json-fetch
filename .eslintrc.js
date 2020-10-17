@@ -1,5 +1,3 @@
-const restrictedGlobals = require('confusing-browser-globals');
-
 module.exports = {
     parser: '@typescript-eslint/parser',
     plugins: [
@@ -37,7 +35,6 @@ module.exports = {
         'no-return-await': 'warn',
         'no-await-in-loop': 'warn',
         'import/no-unresolved': ['error', { commonjs: true }],
-        'no-restricted-globals': ['warn'].concat(restrictedGlobals),
         'no-extra-boolean-cast': 'off',
         '@typescript-eslint/camelcase': 'off',
         '@typescript-eslint/explicit-function-return-type': 'off',
@@ -48,10 +45,16 @@ module.exports = {
             'ts-expect-error': 'allow-with-description',
             minimumDescriptionLength: 6,
         }],
-        // ? Disable these rules for all files...
+        '@typescript-eslint/no-unused-vars': ['warn', {
+            argsIgnorePattern: '^_+',
+            varsIgnorePattern: '^_+',
+            caughtErrorsIgnorePattern: '^ignored?\\d*$',
+            caughtErrors: 'all'
+        }],
+        // ? Ever since v4, we will rely on TypeScript to catch these
         'no-undef': 'off',
         '@typescript-eslint/no-var-requires': 'off',
-        'no-unused-vars': 'off',
+        'no-unused-vars': 'off'
     },
     overrides: [{
         files: ['*.test.*'],
