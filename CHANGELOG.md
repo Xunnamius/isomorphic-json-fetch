@@ -36,19 +36,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### [![v1.0.11](https://api.ergodark.com/badges/github-tag-date/xunnamius/isomorphic-json-fetch/v1.0.11)][v1.0.11]
 #### Changed
-- Added better TypeScript support (isomorphic versions of Request* Types are used now and also exported)
-- Small README.md improvements
+- Added better TypeScript support
+- Small README improvements
 - Updated documentation
 
 ---
 
 ### [![v1.0.10](https://api.ergodark.com/badges/github-tag-date/xunnamius/isomorphic-json-fetch/v1.0.10)][v1.0.10]
 #### Added
-- SWR sugar
+- [SWR]() sugar
 
 #### Changed
-- Added better TypeScript support (ErrorType alongside JsonType)
-- Even better README.md with quick-start and explicit examples
+- Added better TypeScript support (`ErrorType` alongside `JsonType`)
+- Even better README with quick-start and explicit examples
 - Updated documentation
 - More extensive testing
 
@@ -56,12 +56,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### [![v1.0.9](https://api.ergodark.com/badges/github-tag-date/xunnamius/isomorphic-json-fetch/v1.0.9)][v1.0.9]
 #### Changed
-- Better README.md
+- Better README
 - Improvements to the build process
 - Export `FetchConfig` type explicitly
 
 #### Fixed
-- Fixed CHANGELOG.md
+- Fixed CHANGELOG
 - Fixed run scripts
 
 ---
@@ -84,7 +84,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### [![v1.0.6](https://api.ergodark.com/badges/github-tag-date/xunnamius/isomorphic-json-fetch/v1.0.6)][v1.0.6]
 #### Changed
 - Better documentation
-- Better README.md
+- Better README
 
 ---
 
@@ -114,7 +114,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### [![1.0.1](https://api.ergodark.com/badges/github-tag-date/xunnamius/isomorphic-json-fetch/1.0.1)][1.0.1]
 #### Fixed
-- Typo in README.md
+- Typo in README
 
 ---
 
