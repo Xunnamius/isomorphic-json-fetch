@@ -40,13 +40,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Small README.md improvements
 - Updated documentation
 
+---
+
 ### [![v1.0.10](https://api.ergodark.com/badges/github-tag-date/xunnamius/isomorphic-json-fetch/v1.0.10)][v1.0.10]
+#### Added
+- SWR sugar
+
 #### Changed
 - Added better TypeScript support (ErrorType alongside JsonType)
 - Even better README.md with quick-start and explicit examples
-- SWR sugar
 - Updated documentation
 - More extensive testing
+
+---
 
 ### [![v1.0.9](https://api.ergodark.com/badges/github-tag-date/xunnamius/isomorphic-json-fetch/v1.0.9)][v1.0.9]
 #### Changed
