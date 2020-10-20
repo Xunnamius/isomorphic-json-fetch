@@ -16,7 +16,10 @@ module.exports = {
         libraryTarget: 'umd'
     },
 
-    resolve: { extensions: ['.ts', '.js'] },
-    module: { rules: [{ test: /\.(ts|js)x?$/, loader: 'babel-loader', exclude: /node_modules/ }] },
-    stats: { warningsFilter: [/critical dependency:/i] }
+    resolve: {
+        extensions: ['.ts', '.wasm', '.mjs', '.cjs', '.js', '.json'],
+        enforceExtension: true,
+    },
+
+    module: { rules: [{ test: /\.(ts|mjs)x?$/, loader: 'babel-loader', exclude: /node_modules/ }] },
 };

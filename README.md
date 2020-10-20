@@ -59,44 +59,44 @@ doSomethingWith(json.myData);
 // 2. With simple error handling and typed JSON
 
 try {
-    ({ res, json } = await fetch.get<{ myData: number }>(URL));
+  ({ res, json } = await fetch.get<{ myData: number }>(URL));
 
-    if(!json) return handleErr(`response code outside 200-299: ${res.status}`);
-    doSomethingWith(json.myData);
+  if(!json) return handleErr(`response code outside 200-299: ${res.status}`);
+  doSomethingWith(json.myData);
 }
 
 catch(e) {
-    // Could be a JSON parse error or a network issue
-    handleErr(`fetch failed: ${e}`);
+  // Could be a JSON parse error or a network issue
+  handleErr(`fetch failed: ${e}`);
 }
 
 // 3. Explicitly capturing typed JSON from non-2xx responses (e.g. 404, 500)
 
 const configuration = { // <== any configs can also be set globally, see below
-    method: 'POST',
-    body: { query: 'some-string' }
+  method: 'POST',
+  body: { query: 'some-string' }
 };
 
 try {
-    ({ json, error } = await fetch<{ myData: number }, { message: string }>(URL, configuration));
+  ({ json, error } = await fetch<{ myData: number }, { message: string }>(URL, configuration));
 
-    // error is undefined on 2xx responses; json is undefined on non-2xx responses
-    if(error) return handleErr(error.message);
-    doSomethingWith(json.myData);
+  // error is undefined on 2xx responses; json is undefined on non-2xx responses
+  if(error) return handleErr(error.message);
+  doSomethingWith(json.myData);
 }
 
 catch(e) {
-    // Could be a JSON parse error or a network issue
-    handleErr(`fetch failed: ${e}`);
+  // Could be a JSON parse error or a network issue
+  handleErr(`fetch failed: ${e}`);
 }
 
 // 4. Handling non-2xx responses as exceptions in your own catch block instead
 
 try { doSomethingWith((await fetch.post<{ myData: number }>(URL, { rejects: true })).json.myData) }
 catch(e) {
-    // ! Could be a JSON parse error or a network issue OR if the
-    // ! status code is not between 200-299!
-    handleErr(`fetch failed: ${e}`);
+  // ! Could be a JSON parse error or a network issue OR if the
+  // ! status code is not between 200-299!
+  handleErr(`fetch failed: ${e}`);
 }
 
 // 5. As a quick little fetcher for SWR
@@ -138,9 +138,9 @@ const URL = 'api/endpoint';
 
 // This sets a new default configuration object for all fetch calls
 setGlobalFetchConfig({
-    method: 'DELETE', // ? POST is the default
-    credentials: 'include', // ? 'same-origin' by default (no cookies sent!)
-    // content-type header is included by default so no need to add it yourself!
+  method: 'DELETE', // ? POST is the default
+  credentials: 'include', // ? 'same-origin' by default (no cookies sent!)
+  // content-type header is included by default so no need to add it yourself!
 });
 
 // All the following now use the new global config
@@ -149,9 +149,9 @@ let { json } = await fetch(URL); // <== Sends a DELETE request
 
 // You can always override default/global config by providing your own
 ({ json } = await fetch(URL, { // <== Sends a PUT request
-    method: 'PUT',
-    // `headers` and `credentials` keys were not overridden, so their values are
-    // inherited from global config like normal
+  method: 'PUT',
+  // `headers` and `credentials` keys were not overridden, so their values are
+  // inherited from global config like normal
 }));
 
 // This will ignore any errors thrown by `JSON.parse()`

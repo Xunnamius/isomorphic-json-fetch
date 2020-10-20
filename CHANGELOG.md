@@ -1,4 +1,4 @@
-[Upcoming]: https://github.com/Xunnamius/isomorphic-json-fetch/compare/main...develop
+[v1.0.12]: https://github.com/Xunnamius/isomorphic-json-fetch/compare/v1.0.11...v1.0.12
 [v1.0.11]: https://github.com/Xunnamius/isomorphic-json-fetch/compare/v1.0.10...v1.0.11
 [v1.0.10]: https://github.com/Xunnamius/isomorphic-json-fetch/compare/v1.0.9...v1.0.10
 [v1.0.9]: https://github.com/Xunnamius/isomorphic-json-fetch/compare/v1.0.8...v1.0.9
@@ -33,6 +33,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 (no notes yet)
 
 ## Released
+
+### [![v1.0.12](https://api.ergodark.com/badges/github-tag-date/xunnamius/isomorphic-json-fetch/v1.0.12)][v1.0.12]
+#### Changed
+- Switched to dual UMD2 bundle + ES modules configuration
+- Properly externalized dependencies (so: much smaller bundle size!)
+- README updates
+
+---
 
 ### [![v1.0.11](https://api.ergodark.com/badges/github-tag-date/xunnamius/isomorphic-json-fetch/v1.0.11)][v1.0.11]
 #### Changed
@@ -121,3 +129,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### [![1.0.0](https://api.ergodark.com/badges/github-tag-date/xunnamius/isomorphic-json-fetch/1.0.0)][1.0.0]
 #### Added
 - Initial release
+
+[Upcoming]: https://github.com/Xunnamius/isomorphic-json-fetch/compare/main...develop
