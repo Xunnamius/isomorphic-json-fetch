@@ -29,14 +29,6 @@ fetching JSON and sharing configuration across the application. Specifically:
 
 Useful any time your project needs to consume JSON from some endpoint.
 
-This package includes TypeScript types/generics and provides:
-
-+ A UMD bundle (available in browsers and node via `require`, without
-  [tree-shaking](https://webpack.js.org/guides/tree-shaking/) support)
-+ ES2015 modules (available with ES2015 support via `import`, with [no
-  side-effects tree-shaking](https://webpack.js.org/guides/tree-shaking/)
-  support)
-
 ## Install
 
 ```Bash
@@ -244,15 +236,17 @@ the published package
 > You don't need to read this section to use this package, everything should
 "just work"!
 
-This is a [dual CJS2/ES module][dual-module] package. That means this package
-exposes both CJS2 and ESM entry points.
+This is a [dual UMD (CJS2)/ES module][dual-module] package. That means this
+package exposes both UMD+CJS2 and ESM entry points and can be used in most
+JavaScript environments (browsers, any current or LTS Node version, etc).
 
-Loading this package via `require(...)` will cause Node to use the [CJS2
-bundle][CJS2] entry point, disable [tree shaking][tree-shaking] in Webpack 4,
-and lead to larger bundles in Webpack 5. Alternatively, loading this package via
-`import { ... } from ...` or `import(...)` will cause Node to use the ESM entry
-point in [versions that support it][node-esm-support] and in Webpack. Using the
-`import` syntax is the modern, preferred choice.
+Loading this package via `require(...)` will cause Node and modern browsers to
+use the [CJS2 bundle][CJS2] entry point, disable [tree shaking][tree-shaking] in
+Webpack 4, and lead to larger bundles in Webpack 5. Alternatively, loading this
+package via `import { ... } from ...` or `import(...)` will cause Node and
+modern browsers to use the ESM entry point in [versions that support
+it][node-esm-support], in Webpack, and in the browser. Using the `import` syntax
+is the modern, preferred choice.
 
 For backwards compatibility with Webpack 4 and Node versions < 14,
 [`package.json`](package.json) retains the [`module`][module-key] key, which

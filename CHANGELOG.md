@@ -1,3 +1,4 @@
+[v1.0.13]: https://github.com/Xunnamius/isomorphic-json-fetch/compare/v1.0.12...v1.0.13
 [v1.0.12]: https://github.com/Xunnamius/isomorphic-json-fetch/compare/v1.0.11...v1.0.12
 [v1.0.11]: https://github.com/Xunnamius/isomorphic-json-fetch/compare/v1.0.10...v1.0.11
 [v1.0.10]: https://github.com/Xunnamius/isomorphic-json-fetch/compare/v1.0.9...v1.0.10
@@ -33,6 +34,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 (no notes yet)
 
 ## Released
+
+### [![v1.0.13](https://api.ergodark.com/badges/github-tag-date/xunnamius/isomorphic-json-fetch/v1.0.13)][v1.0.13]
+#### Fixed
+- Fixed README.md package details
+
+---
 
 ### [![v1.0.12](https://api.ergodark.com/badges/github-tag-date/xunnamius/isomorphic-json-fetch/v1.0.12)][v1.0.12]
 #### Changed
