@@ -37,7 +37,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### [![v1.0.12](https://api.ergodark.com/badges/github-tag-date/xunnamius/isomorphic-json-fetch/v1.0.12)][v1.0.12]
 #### Changed
 - Switched to dual UMD2 bundle + ES modules configuration
-- Properly externalized dependencies (so: much smaller bundle size!)
 - README updates
 - Tooling updates
 - Bumped dependencies

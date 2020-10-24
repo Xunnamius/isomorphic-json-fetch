@@ -3,14 +3,14 @@ import { main } from '../package.json'
 import { getGlobalFetchConfig as getExpectedConfig } from '../src/index'
 import { unitServer, unitServerPuppeteer } from './setup'
 
-describe('isomorphic-json-fetch [INTEGRATION TESTS]', () => {
+describe('isomorphic-json-fetch [INTEGRATION TESTS: CJS]', () => {
     describe('browser environment', () => {
         it('should export expected members', async () => {
             expect.hasAssertions();
 
             await unitServerPuppeteer({
                 client: async ({ page, run }) => {
-                    await run(`${__dirname}/../${main}`);
+                    await run(`${__dirname}/../${main}.js`);
                     expect(await page.evaluate(() => Object.keys(window))).toIncludeAllMembers([
                         'getGlobalFetchConfig',
                         'setGlobalFetchConfig',
@@ -26,7 +26,7 @@ describe('isomorphic-json-fetch [INTEGRATION TESTS]', () => {
 
             await unitServerPuppeteer({
                 client: async ({ page, run }) => {
-                    await run(`${__dirname}/../${main}`);
+                    await run(`${__dirname}/../${main}.js`);
 
                     expect(await page.evaluate(() => (window as any).getGlobalFetchConfig())).toStrictEqual(getExpectedConfig());
                     await page.evaluate(() => (window as any).setGlobalFetchConfig({ a: 1 }));
@@ -40,7 +40,7 @@ describe('isomorphic-json-fetch [INTEGRATION TESTS]', () => {
 
             await unitServerPuppeteer({
                 client: async ({ page, run, url }) => {
-                    await run(`${__dirname}/../${main}`);
+                    await run(`${__dirname}/../${main}.js`);
 
                     expect(await page.evaluate(async url => (await (window as any).fetch(url)).json, url)).toStrictEqual({method: 'POST'});
                     expect(await page.evaluate(async url => (await (window as any).fetch.get(url)).json, url)).toStrictEqual({method: 'GET'});
@@ -59,7 +59,7 @@ describe('isomorphic-json-fetch [INTEGRATION TESTS]', () => {
                 fetch,
                 unfetch,
                 ...rest
-            } = await import(`${__dirname}/../${main}`);
+            } = await import(`${__dirname}/../${main}.js`);
 
             expect(getGlobalFetchConfig).toBeDefined();
             expect(setGlobalFetchConfig).toBeDefined();
@@ -74,7 +74,7 @@ describe('isomorphic-json-fetch [INTEGRATION TESTS]', () => {
             const {
                 getGlobalFetchConfig,
                 setGlobalFetchConfig,
-            } = await import(`${__dirname}/../${main}`);
+            } = await import(`${__dirname}/../${main}.js`);
 
             expect(getGlobalFetchConfig()).toStrictEqual(getExpectedConfig());
             setGlobalFetchConfig({ a: 1 });
@@ -86,7 +86,7 @@ describe('isomorphic-json-fetch [INTEGRATION TESTS]', () => {
         it('should fetch properly', async () => {
             expect.hasAssertions();
 
-            const { fetch } = await import(`${__dirname}/../${main}`);
+            const { fetch } = await import(`${__dirname}/../${main}.js`);
 
             await unitServer({
                 client: async ({ url }) => {
