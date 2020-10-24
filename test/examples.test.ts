@@ -1,3 +1,4 @@
+import { AnyFunction } from '@ergodark/types';
 import {
     fetch,
     setGlobalFetchConfig
@@ -6,9 +7,10 @@ import {
 import { unitServer } from './setup'
 
 const useSwr = async (key: string, fetcher: (url: string) => Promise<unknown>) => {
-    let data, error;
+    let data: { myData: number } = { myData: -1 };
+    let error;
 
-    try { data = await fetcher(key) }
+    try { data = (await fetcher(key)) as typeof data }
     catch(e) { error = e }
 
     return { data, error };
@@ -18,7 +20,12 @@ const TEST_VAL = 5;
 const TEST_OBJ = JSON.stringify({ myData: TEST_VAL });
 const BAD_STR = '{"bad json":';
 
-const clientFactory = async (ex, o) => {
+const clientFactory = async (
+    ex: (doSomethingWith: AnyFunction, handleErr: AnyFunction, handleException: AnyFunction) => (params: {
+        url: string
+    }) => Promise<void>,
+    o: number[][]
+) => {
     const d = jest.fn((n: number) => expect(n).toBe(TEST_VAL));
     const e = jest.fn();
     const x = jest.fn();
@@ -70,8 +77,8 @@ describe('isomorphic-json-fetch [README EXAMPLES]', () => {
 
         await unitServer({
             client: async ({ url: URL }) => {
-                const { json } = await fetch(URL);
-                d(json['myData']);
+                const { json } = await fetch<{ myData: number }>(URL);
+                json?.myData && d(json.myData);
             },
             server: (_, res) => res.end(TEST_OBJ)
         });
@@ -88,7 +95,7 @@ describe('isomorphic-json-fetch [README EXAMPLES]', () => {
             try {
                 const { res, json } = await fetch.get<{ myData: number }>(URL);
 
-                if(!json) return handleErr(`response code outside 200-299: ${res.status}`);
+                if(!json) return void handleErr(`response code outside 200-299: ${res.status}`);
                 doSomethingWith(json.myData);
             }
 
@@ -113,8 +120,8 @@ describe('isomorphic-json-fetch [README EXAMPLES]', () => {
             try {
                 const { json, error } = await fetch<{ myData: number }, { message: string }>(URL, configuration);
 
-                if(error) return handleErr(error.message);
-                doSomethingWith(json.myData);
+                if(error) return void handleErr(error.message);
+                json?.myData && doSomethingWith(json.myData);
             }
 
             catch(e) {
@@ -130,7 +137,7 @@ describe('isomorphic-json-fetch [README EXAMPLES]', () => {
         // 4. Handling non-2xx responses in your own catch block instead
 
         await clientFactory((doSomethingWith, _, handleException) => async ({ url: URL }) => {
-            try { doSomethingWith((await fetch.post<{ myData: number }>(URL, { rejects: true })).json.myData) }
+            try { doSomethingWith((await fetch.post<{ myData: number }>(URL, { rejects: true })).json?.myData) }
             catch(e) {
                 // ! Could be a JSON parse error or a network issue OR if the
                 // ! status code is not between 200-299!
@@ -147,9 +154,9 @@ describe('isomorphic-json-fetch [README EXAMPLES]', () => {
         await clientFactory((doSomethingWith, handleErr) => async ({ url: URL }) => {
             const { data, error } = await useSwr(URL, fetch.swr);
 
-            if(error) return handleErr('failed to load');
-            if(!data) return doSomethingWith(5);
-            return doSomethingWith(data.myData);
+            if(error) return void handleErr('failed to load');
+            if(!data) return void doSomethingWith(5);
+            return void doSomethingWith(data.myData);
         }, [ [0, 1, 0], [1, 1, 0], [1, 2, 0], [1, 3, 0] ]);
     });
 
@@ -163,7 +170,7 @@ describe('isomorphic-json-fetch [README EXAMPLES]', () => {
             // content-type header is included by default so no need to add it yourself!
         });
 
-        let body;
+        let body: string;
 
         await unitServer({
             client: async ({ url: URL }) => {
@@ -193,9 +200,9 @@ describe('isomorphic-json-fetch [README EXAMPLES]', () => {
                 body = TEST_OBJ;
 
                 // TypeScript support for defining json return type and error return type
-                ({ json } = await fetch.get<'technically valid JSON', { error: string }>(URL));
+                const { json: j } = await fetch.get<'technically valid JSON', { error: string }>(URL);
 
-                expect(json).not.toBeUndefined();
+                expect(j).not.toBeUndefined();
             },
             server: (_, res) => res.end(body)
         });

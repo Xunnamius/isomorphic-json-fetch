@@ -58,7 +58,7 @@ export async function fetch<
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   ErrorType extends SerializedValue = JsonType>(
     url: string,
-    config?: Omit<FetchConfig, 'swr'> & { swr: true }
+    config: Omit<FetchConfig, 'swr'> & { swr: true }
 ): Promise<JsonType>;
 /**
  * Performs an isomorphic (un)fetch.
