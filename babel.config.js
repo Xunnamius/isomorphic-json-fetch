@@ -1,8 +1,6 @@
 // * Every now and then, we adopt best practices from CRA
 // * https://tinyurl.com/yakv4ggx
 
-const targets = '>1% in US and not ie 11';
-
 module.exports = {
     parserOpts: { strictMode: true },
     plugins: [
@@ -15,7 +13,7 @@ module.exports = {
         test: {
             sourceMaps: 'both',
             presets: [
-                ['@babel/preset-env', { targets: targets }],
+                ['@babel/preset-env', { targets: '>1% in US and not ie 11' }],
                 ['@babel/preset-typescript', { allowDeclareFields: true }],
                 // ? We don't care about minification
             ]
@@ -23,7 +21,12 @@ module.exports = {
         // * Used by `npm run build`
         production: {
             presets: [
-                ['@babel/preset-env', { targets: targets }],
+                ['@babel/preset-env', {
+                    // ? https://github.com/babel/babel-loader/issues/521#issuecomment-441466991
+                    //modules: false,
+                    // ? https://nodejs.org/en/about/releases
+                    targets: { node: '10.13.0' }
+                }],
                 ['@babel/preset-typescript', { allowDeclareFields: true }],
                 // ? Webpack will handle minification
             ]
@@ -39,6 +42,10 @@ module.exports = {
                 }],
                 ['@babel/preset-typescript', { allowDeclareFields: true }],
                 // ? The end user will handle minification
+            ],
+            plugins: [
+                // ? Interoperable named CJS imports for free
+                'babel-plugin-transform-mjs-imports',
             ]
         },
     }

@@ -1,25 +1,33 @@
-// This webpack config is used for transpiling src/ to UMD+ES2015 and depositing
-// bundled output to dist/
+// This webpack config is used for helping transpile src/ => dist/ as dual
+// UMD/CJS2+ES2015
 
-process.env.NODE_ENV = 'production';
+const nodeExternals = require('webpack-node-externals');
 
 module.exports = {
-    name: 'umd',
-    target: 'node',
+    name: 'main',
     mode: 'production',
+    target: 'node',
+    node: false,
+
     entry: `${__dirname}/src/index.ts`,
 
     output: {
-        filename: 'umd.js',
-        path: `${__dirname}/dist`,
+        filename: 'index.js',
+        path: `${__dirname}/dist/lib`,
         globalObject: 'this',
         libraryTarget: 'umd'
     },
 
-    resolve: {
-        extensions: ['.ts', '.wasm', '.mjs', '.cjs', '.js', '.json'],
-        enforceExtension: true,
+    externals: [nodeExternals()],
+
+    stats: {
+        //orphanModules: true, // ? Webpack 5
+        providedExports: true,
+        usedExports: true,
     },
 
-    module: { rules: [{ test: /\.(ts|mjs)x?$/, loader: 'babel-loader', exclude: /node_modules/ }] },
+    resolve: { extensions: ['.ts', '.wasm', '.mjs', '.cjs', '.js', '.json'] },
+    module: { rules: [{ test: /\.(ts|js)x?$/, loader: 'babel-loader', exclude: /node_modules/ }] },
+    optimization: { usedExports: true },
+    //ignoreWarnings: [/critical dependency:/i], // ? Webpack 5
 };

@@ -39,7 +39,7 @@ This package includes TypeScript types/generics and provides:
 
 ## Install
 
-```sh
+```Bash
 npm install isomorphic-json-fetch
 ```
 
@@ -191,21 +191,96 @@ you submit a pull request, take care to maintain the existing coding style and
 add unit tests for any new or changed functionality. Please lint and test your
 code, of course!
 
-Use `npm run build` to compile `src/` into `dist/`, which is what makes it into
-the published package. Use `npm run build-docs` to re-build the documentation.
-Use `npm test` to run the unit tests, `npm run check-build` to run the e2e
-tests, and `check-types` to run a type check. Use `npm run list-tasks` to list
-all available run scripts.
+### NPM Scripts
 
-Note that using the NPM run scripts to build the documentation and
-distributables requires a linux-like development environment. None of the run
-scripts are likely to work on non-POSIX environments. If you're on Windows, use
-[WSL](https://docs.microsoft.com/en-us/windows/wsl/install-win10).
+Run `npm run list-tasks` to see which of the following scripts are available for
+this project.
 
-This package is published using
-[publish-please](https://www.npmjs.com/package/publish-please) via `npx
-publish-please`.
+> Using these scripts requires a linux-like development environment. None of the
+> scripts are likely to work on non-POSIX environments. If you're on Windows,
+> use [WSL](https://docs.microsoft.com/en-us/windows/wsl/install-win10).
 
-## Release history
+#### Development
+
+- `npm run repl` to run a buffered TypeScript-Babel REPL
+- `npm test` to run the unit tests and gather test coverage data
+  - Look for HTML files under `coverage/`
+- `npm run check-build` to run the integration tests
+- `npm run check-types` to run a project-wide type check
+- `npm run test-repeat` to run the entire test suite 100 times
+  - Good for spotting bad async code and heisenbugs
+  - Uses `__test-repeat` NPM script under the hood
+- `npm run dev` to start a development server or instance
+- `npm run generate` to transpile config files (under `config/`) from scratch
+- `npm run regenerate` to quickly re-transpile config files (under `config/`)
+
+#### Building
+
+- `npm run clean` to delete all build process artifacts
+- `npm run build` to compile `src/` into `dist/`, which is what makes it into
+the published package
+- `npm run build-docs` to re-build the documentation
+- `npm run build-externals` to compile `external-scripts/` into
+  `external-scripts/bin/`
+- `npm run build-stats` to gather statistics about Webpack (look for
+  `bundle-stats.json`)
+
+#### Publishing
+
+- `npm run start` to start a production instance
+- `npm run fixup` to run pre-publication tests, rebuilds (like documentation),
+  and validations
+  - Triggered automatically by
+    [publish-please](https://www.npmjs.com/package/publish-please)
+
+#### NPX
+
+- `npx publish-please` to publish the package
+- `npx sort-package-json` to consistently sort `package.json`
+- `npx npm-force-resolutions` to forcefully patch security audit problems
+
+## Package Details
+
+> You don't need to read this section to use this package, everything should
+"just work"!
+
+This is a [dual CJS2/ES module][dual-module] package. That means this package
+exposes both CJS2 and ESM entry points.
+
+Loading this package via `require(...)` will cause Node to use the [CJS2
+bundle][CJS2] entry point, disable [tree shaking][tree-shaking] in Webpack 4,
+and lead to larger bundles in Webpack 5. Alternatively, loading this package via
+`import { ... } from ...` or `import(...)` will cause Node to use the ESM entry
+point in [versions that support it][node-esm-support] and in Webpack. Using the
+`import` syntax is the modern, preferred choice.
+
+For backwards compatibility with Webpack 4 and Node versions < 14,
+[`package.json`](package.json) retains the [`module`][module-key] key, which
+points to the ESM entry point, and the [`main`][exports-main-key] key, which
+points to both the ESM and CJS2 entry points implicitly (no file extension). For
+Webpack 5 and Node versions >= 14, [`package.json`](package.json) includes the
+[`exports`][exports-main-key] key, which points to both entry points explicitly.
+
+Though [`package.json`](package.json) includes [`{ "type":
+"commonjs"}`][local-pkg], note that the ESM entry points are ES module (`.mjs`)
+files. [`package.json`](package.json) also includes the
+[`sideEffects`][side-effects-key] key, which is `false` for [optimal tree
+shaking][tree-shaking], and the `types` key, which points to a TypeScript
+declarations file.
+
+> This package does not maintain shared state and so does not exhibit the [dual
+> package hazard][hazard].
+
+## Release History
 
 See [CHANGELOG.md](CHANGELOG.md).
+
+[module-key]: https://webpack.js.org/guides/author-libraries/#final-steps
+[side-effects-key]: https://webpack.js.org/guides/tree-shaking/#mark-the-file-as-side-effect-free
+[dual-module]: https://github.com/nodejs/node/blob/8d8e06a345043bec787e904edc9a2f5c5e9c275f/doc/api/packages.md#dual-commonjses-module-packages
+[exports-main-key]: https://github.com/nodejs/node/blob/8d8e06a345043bec787e904edc9a2f5c5e9c275f/doc/api/packages.md#package-entry-points
+[hazard]: https://github.com/nodejs/node/blob/8d8e06a345043bec787e904edc9a2f5c5e9c275f/doc/api/packages.md#dual-package-hazard
+[CJS2]: https://webpack.js.org/configuration/output/#module-definition-systems
+[tree-shaking]: https://webpack.js.org/guides/tree-shaking
+[local-pkg]: https://github.com/nodejs/node/blob/8d8e06a345043bec787e904edc9a2f5c5e9c275f/doc/api/packages.md#type
+[node-esm-support]: https://medium.com/@nodejs/node-js-version-14-available-now-8170d384567e#2368

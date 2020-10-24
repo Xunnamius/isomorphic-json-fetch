@@ -20,6 +20,7 @@ module.exports = {
             impliedStrict: true,
             experimentalObjectRestSpread: true
         },
+        extraFileExtensions: ['.mjs', '.cjs'],
         project: 'tsconfig.eslint.json'
     },
     env: {
@@ -88,5 +89,5 @@ module.exports = {
             '.*/node_modules/.*'
         ]
     },
-    ignorePatterns: ['coverage', 'dist']
+    ignorePatterns: ['coverage', 'dist', 'bin']
 };
