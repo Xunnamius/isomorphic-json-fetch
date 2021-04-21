@@ -1,41 +1,39 @@
-# isomorphic-json-fetch
-
-## Index
+## Table of contents
 
 ### Namespaces
 
-* [unfetch](modules/unfetch.md)
+- [fetch](modules/fetch.md)
+- [unfetch](modules/unfetch.md)
 
 ### Type aliases
 
-* [FetchConfig](README.md#fetchconfig)
+- [FetchConfig](README.md#fetchconfig)
 
 ### Functions
 
-* [fetch](README.md#fetch)
-* [getGlobalFetchConfig](README.md#getglobalfetchconfig)
-* [setGlobalFetchConfig](README.md#setglobalfetchconfig)
+- [fetch](README.md#fetch)
+- [getGlobalFetchConfig](README.md#getglobalfetchconfig)
+- [setGlobalFetchConfig](README.md#setglobalfetchconfig)
+- [unfetch](README.md#unfetch)
 
 ## Type aliases
 
 ### FetchConfig
 
-Ƭ  **FetchConfig**: Omit\<RequestInit, \"body\"> & { body?: Record\<string, unknown> ; ignoreParseErrors?: undefined \| false \| true ; rejects?: undefined \| false \| true ; swr?: undefined \| false \| true  }
+Ƭ **FetchConfig**: *Omit*<RequestInit, ``"body"``\> & { `body?`: *Record*<string, unknown\> ; `ignoreParseErrors?`: *boolean* ; `rejects?`: *boolean* ; `swr?`: *boolean*  }
 
-*Defined in [src/index.ts:5](https://github.com/Xunnamius/isomorphic-json-fetch/blob/bd9106c/src/index.ts#L5)*
+Defined in: [src/index.ts:6](https://github.com/Xunnamius/isomorphic-json-fetch/blob/6259711/src/index.ts#L6)
 
 ## Functions
 
 ### fetch
 
-▸ **fetch**\<JsonType, ErrorType>(`url`: string, `config?`: Omit\<[FetchConfig](README.md#fetchconfig), \"swr\"> & { swr: true  }): Promise\<JsonType>
-
-*Defined in [src/index.ts:56](https://github.com/Xunnamius/isomorphic-json-fetch/blob/bd9106c/src/index.ts#L56)*
+▸ **fetch**<JsonType, ErrorType\>(`url`: *string*, `config`: *Omit*<[*FetchConfig*](README.md#fetchconfig), ``"swr"``\> & { `swr`: ``true``  }): *Promise*<JsonType\>
 
 Performs an isomorphic (un)fetch and returns the JsonType response or throws
 as SWR expects.
 
-Example:
+**`example`** 
 ```
   const { data: json, error } = useSwr('api/endpoint', fetch.swr);
   // Or:                  ... = useSwr('api/endpoint', key => fetch(key, { swr: true }));
@@ -46,43 +44,34 @@ Example:
 
 #### Type parameters:
 
-Name | Type |
------- | ------ |
-`JsonType` | SerializedValue |
-`ErrorType` | SerializedValue |
+| Name | Type | Default |
+| :------ | :------ | :------ |
+| `JsonType` | SerializedValue | *Record*<string, unknown\> |
+| `ErrorType` | SerializedValue | JsonType |
 
 #### Parameters:
 
-Name | Type |
------- | ------ |
-`url` | string |
-`config?` | Omit\<[FetchConfig](README.md#fetchconfig), \"swr\"> & { swr: true  } |
+| Name | Type |
+| :------ | :------ |
+| `url` | *string* |
+| `config` | *Omit*<[*FetchConfig*](README.md#fetchconfig), ``"swr"``\> & { `swr`: ``true``  } |
 
-**Returns:** Promise\<JsonType>
+**Returns:** *Promise*<JsonType\>
 
-▸ **fetch**\<JsonType, ErrorType>(`url`: string, `config?`: [FetchConfig](README.md#fetchconfig)): Promise\<{ error: ErrorType \| undefined ; json: JsonType \| undefined ; res: Response  }>
+Defined in: [src/index.ts:57](https://github.com/Xunnamius/isomorphic-json-fetch/blob/6259711/src/index.ts#L57)
 
-*Defined in [src/index.ts:90](https://github.com/Xunnamius/isomorphic-json-fetch/blob/bd9106c/src/index.ts#L90)*
+▸ **fetch**<JsonType, ErrorType\>(`url`: *string*, `config?`: [*FetchConfig*](README.md#fetchconfig)): *Promise*<{ `error`: ErrorType \| *undefined* ; `json`: JsonType \| *undefined* ; `res`: Response  }\>
 
-Performs an isomorphic (un)fetch.
+Performs an isomorphic (un)fetch, following redirects as necessary.
 
-Throws:
-  1) When parsing the body for JSON content fails and `config ⊅
-     {ignoreParseErrors: true }`
-  2) When `config ⊇ { rejects: true }` or `config ⊇ { swr: true }` and a
-     non-2xx response is received.
-
-Otherwise, returns a Response object `res` and parsed response body as `json`
-(`===undefined` on non-2xx response) or `error` (`===undefined` on 2xx
-response).
-
-Example:
+**`example`** 
 ```
   const { json, error } = fetch.post<{ data: number }, { message: string }>(
     'api/endpoint',
     {
       headers: { key: apiKey },
-      body: requestData
+      body: requestData,
+      rejects: false // false is the default
     }
   );
 
@@ -90,48 +79,79 @@ Example:
   return json.data;
 ```
 
+**`throws`** 
+1) When parsing the body for JSON content fails and `{ ignoreParseErrors:
+   true }`.
+2) When `{ rejects: true }` or `{ swr: true }` and a non-2xx response is
+   received.
+
 #### Type parameters:
 
-Name | Type |
------- | ------ |
-`JsonType` | SerializedValue |
-`ErrorType` | SerializedValue |
+| Name | Type | Default |
+| :------ | :------ | :------ |
+| `JsonType` | SerializedValue | *Record*<string, unknown\> |
+| `ErrorType` | SerializedValue | JsonType |
 
 #### Parameters:
 
-Name | Type |
------- | ------ |
-`url` | string |
-`config?` | [FetchConfig](README.md#fetchconfig) |
+| Name | Type |
+| :------ | :------ |
+| `url` | *string* |
+| `config?` | [*FetchConfig*](README.md#fetchconfig) |
 
-**Returns:** Promise\<{ error: ErrorType \| undefined ; json: JsonType \| undefined ; res: Response  }>
+**Returns:** *Promise*<{ `error`: ErrorType \| *undefined* ; `json`: JsonType \| *undefined* ; `res`: Response  }\>
+
+1) A Response object `res` and parsed response body `json`
+2) `error` (`undefined` on 2xx response)
+
+Note: `json` is undefined on non-2xx responses while `error` is undefined on
+2xx responses.
+
+Defined in: [src/index.ts:96](https://github.com/Xunnamius/isomorphic-json-fetch/blob/6259711/src/index.ts#L96)
 
 ___
 
 ### getGlobalFetchConfig
 
-▸ **getGlobalFetchConfig**(): {} & { body?: Record\<string, unknown> ; ignoreParseErrors?: undefined \| false \| true ; rejects?: undefined \| false \| true ; swr?: undefined \| false \| true  }
-
-*Defined in [src/index.ts:32](https://github.com/Xunnamius/isomorphic-json-fetch/blob/bd9106c/src/index.ts#L32)*
+▸ **getGlobalFetchConfig**(): [*FetchConfig*](README.md#fetchconfig)
 
 Get the default config object merged in during all `fetch()` calls.
 
-**Returns:** {} & { body?: Record\<string, unknown> ; ignoreParseErrors?: undefined \| false \| true ; rejects?: undefined \| false \| true ; swr?: undefined \| false \| true  }
+**Returns:** [*FetchConfig*](README.md#fetchconfig)
+
+Defined in: [src/index.ts:33](https://github.com/Xunnamius/isomorphic-json-fetch/blob/6259711/src/index.ts#L33)
 
 ___
 
 ### setGlobalFetchConfig
 
-▸ **setGlobalFetchConfig**(`config`: [FetchConfig](README.md#fetchconfig)): void
-
-*Defined in [src/index.ts:39](https://github.com/Xunnamius/isomorphic-json-fetch/blob/bd9106c/src/index.ts#L39)*
+▸ **setGlobalFetchConfig**(`config`: [*FetchConfig*](README.md#fetchconfig)): *void*
 
 Set the default config object merged in during all `fetch()` calls.
 
 #### Parameters:
 
-Name | Type |
------- | ------ |
-`config` | [FetchConfig](README.md#fetchconfig) |
+| Name | Type |
+| :------ | :------ |
+| `config` | [*FetchConfig*](README.md#fetchconfig) |
 
-**Returns:** void
+**Returns:** *void*
+
+Defined in: [src/index.ts:40](https://github.com/Xunnamius/isomorphic-json-fetch/blob/6259711/src/index.ts#L40)
+
+___
+
+### unfetch
+
+▸ `Const`**unfetch**(`input`: RequestInfo, `init?`: RequestInit): *Promise*<Response\>
+
+#### Parameters:
+
+| Name | Type |
+| :------ | :------ |
+| `input` | RequestInfo |
+| `init?` | RequestInit |
+
+**Returns:** *Promise*<Response\>
+
+Defined in: node_modules/isomorphic-unfetch/index.d.ts:17
