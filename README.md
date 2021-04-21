@@ -3,17 +3,20 @@
 [![Last commit timestamp](https://img.shields.io/github/last-commit/xunnamius/isomorphic-json-fetch/develop "When was the last commit to the official repo?")](https://www.npmjs.com/package/isomorphic-json-fetch)
 [![Open issues](https://img.shields.io/github/issues/xunnamius/isomorphic-json-fetch "Number of known issues with this package")](https://www.npmjs.com/package/isomorphic-json-fetch)
 [![Pull requests](https://img.shields.io/github/issues-pr/xunnamius/isomorphic-json-fetch "Number of open pull requests")](https://www.npmjs.com/package/isomorphic-json-fetch)
-[![DavidDM dependencies](https://img.shields.io/david/xunnamius/isomorphic-json-fetch "Status of this package's dependencies")](https://david-dm.org/xunnamius/isomorphic-json-fetch)
 [![Source license](https://img.shields.io/npm/l/isomorphic-json-fetch "This package's source license")](https://www.npmjs.com/package/isomorphic-json-fetch)
 [![NPM version](https://api.ergodark.com/badges/npm-pkg-version/isomorphic-json-fetch "Install this package using npm or yarn!")](https://www.npmjs.com/package/isomorphic-json-fetch)
+[![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 
 # isomorphic-json-fetch 🐕🐕🐕
 
-I love [unfetch](https://github.com/developit/unfetch) ~~mostly because it
-reminds me of my dog~~ because it's such a lightweight no-nonsense fetch
-library. This package is a small wrapper around unfetch geared specifically for
-fetching JSON and sharing configuration across the application. Specifically:
+Useful any time your project needs to consume JSON from some endpoint.
 
+I love [unfetch](https://github.com/developit/unfetch) because ~~it reminds me
+of my dog~~ it's such a lightweight no-nonsense fetch library. This package is a
+small wrapper around unfetch geared specifically for fetching JSON and sharing
+configuration across the application. Specifically:
+
++ TypeScript support
 + Default method is `POST` (unless using SWR)
 + Sugar functions for GET/POST/PUT/DELETE methods
 + `content-type` header is set to `application/json`
@@ -27,17 +30,15 @@ fetching JSON and sharing configuration across the application. Specifically:
 + Sugar function for simple integration with
   [SWR](https://www.npmjs.com/package/swr)
 
-Useful any time your project needs to consume JSON from some endpoint.
-
 ## Install
 
-```Bash
+```bash
 npm install isomorphic-json-fetch
 ```
 
 ## Quick start
 
-```TypeScript
+```typeScript
 import { fetch } from 'isomorphic-json-fetch'
 
 const URL = 'api/endpoint';
@@ -176,17 +177,23 @@ const { json: del }  = await fetch.delete('/app?t=4');
 Documentation can be found under [`docs/`](docs/README.md) and can be built with
 `npm run build-docs`.
 
-## Contributing
+## Supporting and Contributing
 
-**New issues and pull requests are always welcome and greatly appreciated!** If
-you submit a pull request, take care to maintain the existing coding style and
-add unit tests for any new or changed functionality. Please lint and test your
-code, of course!
+**New issues and pull requests are always welcome and greatly appreciated! 🤩**
+But that's not the only way to contribute! Just as well, you can star 🌟 this
+project to let me know you found it useful! Thank you for your support ✊🏿
+
+This repository uses a CI/CD
+[semantic-release](https://github.com/semantic-release/semantic-release#readme)
+pipeline for vetting PRs and publishing releases. Be sure to
+[checkout](https://git-scm.com/docs/git-checkout) the `develop` branch (*not
+`main`*) and, when you're ready, fearlessly submit your PR against `develop`.
+The pipeline will take care of the rest 🚀🚀🚀
 
 ### NPM Scripts
 
-Run `npm run list-tasks` to see which of the following scripts are available for
-this project.
+Run `npm run list-tasks` locally to see which of the following scripts are
+available for this project.
 
 > Using these scripts requires a linux-like development environment. None of the
 > scripts are likely to work on non-POSIX environments. If you're on Windows,
@@ -217,17 +224,12 @@ the published package
 - `npm run build-stats` to gather statistics about Webpack (look for
   `bundle-stats.json`)
 
-#### Publishing
+#### Deploying
 
 - `npm run start` to start a production instance
-- `npm run fixup` to run pre-publication tests, rebuilds (like documentation),
-  and validations
-  - Triggered automatically by
-    [publish-please](https://www.npmjs.com/package/publish-please)
 
 #### NPX
 
-- `npx publish-please` to publish the package
 - `npx sort-package-json` to consistently sort `package.json`
 - `npx npm-force-resolutions` to forcefully patch security audit problems
 
@@ -263,11 +265,8 @@ shaking][tree-shaking], and the `types` key, which points to a TypeScript
 declarations file.
 
 > This package does not maintain shared state and so does not exhibit the [dual
-> package hazard][hazard].
-
-## Release History
-
-See [CHANGELOG.md](CHANGELOG.md).
+> package hazard][hazard]. However, setting global configuration may not
+> actually be "globally" recognized by third-party code importing this package.
 
 [module-key]: https://webpack.js.org/guides/author-libraries/#final-steps
 [side-effects-key]: https://webpack.js.org/guides/tree-shaking/#mark-the-file-as-side-effect-free
