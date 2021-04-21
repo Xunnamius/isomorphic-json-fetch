@@ -1,5 +1,8 @@
 import unfetch from "isomorphic-unfetch";
 
+// TODO: retire @ergodark/types
+import type { SerializedValue } from "@ergodark/types";
+
 export type FetchConfig = Omit<RequestInit, "body"> & {
     swr?: boolean;
     rejects?: boolean;
@@ -39,6 +42,40 @@ export function setGlobalFetchConfig(config: FetchConfig) {
 }
 
 /**
+ * Performs an isomorphic (un)fetch and returns the JsonType response or
+ * immediately rejects. Hence, `error` will always be undefined and `json` will
+ * always be defined.
+ *
+ * @example
+ * ```
+ * try {
+ *   const { json } = fetch('https://some.resource.com/data.json', {
+ *     rejects: true
+ *   });
+ *   doSomethingWith(json);
+ * } catch(e) {
+ *   // ...
+ * }
+ * ```
+ *
+ * @throws When a non-2xx response is received
+ */
+export async function fetch<
+    JsonType extends SerializedValue = Record<string, unknown>,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    ErrorType extends SerializedValue = JsonType
+>(
+    url: string,
+    config: Omit<FetchConfig, "rejects" | "swr"> & {
+        rejects: true;
+        swr?: false;
+    }
+): Promise<{
+    res: Response;
+    json: JsonType;
+    error: undefined;
+}>;
+/**
  * Performs an isomorphic (un)fetch and returns the JsonType response or throws
  * as SWR expects.
  *
@@ -50,6 +87,8 @@ export function setGlobalFetchConfig(config: FetchConfig) {
  *   if(error) <div>Error: {error.message}</div>;
  *   return <div>Hello, your data is: {json.data}</div>;
  * ```
+ *
+ * @throws When a non-2xx response is received
  */
 export async function fetch<
     JsonType extends SerializedValue = Record<string, unknown>,
@@ -57,7 +96,10 @@ export async function fetch<
     ErrorType extends SerializedValue = JsonType
 >(
     url: string,
-    config: Omit<FetchConfig, "swr"> & { swr: true }
+    config: Omit<FetchConfig, "swr" | "rejects"> & {
+        swr: true;
+        rejects?: false;
+    }
 ): Promise<JsonType>;
 /**
  * Performs an isomorphic (un)fetch, following redirects as necessary.
@@ -85,10 +127,7 @@ export async function fetch<
  * ```
  *
  * @throws
- * 1) When parsing the body for JSON content fails and `{ ignoreParseErrors:
- *    true }`.
- * 2) When `{ rejects: true }` or `{ swr: true }` and a non-2xx response is
- *    received.
+ * When parsing the body for JSON content fails and `{ ignoreParseErrors: true }`
  */
 export async function fetch<
     JsonType extends SerializedValue = Record<string, unknown>,
