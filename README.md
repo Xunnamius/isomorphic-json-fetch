@@ -7,12 +7,11 @@
 [![NPM version](https://api.ergodark.com/badges/npm-pkg-version/isomorphic-json-fetch "Install this package using npm or yarn!")](https://www.npmjs.com/package/isomorphic-json-fetch)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 
-# isomorphic-json-fetch 🐕🐕🐕
+# isomorphic-json-fetch 🐕
 
 Useful any time your project needs to consume JSON from some endpoint.
 
-I love [unfetch](https://github.com/developit/unfetch) because ~~it reminds me
-of my dog~~ it's such a lightweight no-nonsense fetch library. This package is a
+This package is a
 small wrapper around unfetch geared specifically for fetching JSON and sharing
 configuration across the application. Specifically:
 
