@@ -22,7 +22,7 @@ Re-export these
 
 Defined in: node_modules/isomorphic-unfetch/index.d.ts:11
 
-___
+---
 
 ### IsomorphicHeaders
 
@@ -30,7 +30,7 @@ ___
 
 Defined in: node_modules/isomorphic-unfetch/index.d.ts:10
 
-___
+---
 
 ### IsomorphicRequest
 
@@ -38,7 +38,7 @@ ___
 
 Defined in: node_modules/isomorphic-unfetch/index.d.ts:13
 
-___
+---
 
 ### IsomorphicRequestInit
 
@@ -46,7 +46,7 @@ ___
 
 Defined in: node_modules/isomorphic-unfetch/index.d.ts:14
 
-___
+---
 
 ### IsomorphicResponse
 

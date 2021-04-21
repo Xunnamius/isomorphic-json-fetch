@@ -1,32 +1,31 @@
-[![Black Lives Matter!](https://api.ergodark.com/badges/blm "Join the movement!")](https://secure.actblue.com/donate/ms_blm_homepage_2019)
-[![Maintenance status](https://img.shields.io/maintenance/active/2021 "Is this package maintained?")](https://www.npmjs.com/package/isomorphic-json-fetch)
-[![Last commit timestamp](https://img.shields.io/github/last-commit/xunnamius/isomorphic-json-fetch/develop "When was the last commit to the official repo?")](https://www.npmjs.com/package/isomorphic-json-fetch)
-[![Open issues](https://img.shields.io/github/issues/xunnamius/isomorphic-json-fetch "Number of known issues with this package")](https://www.npmjs.com/package/isomorphic-json-fetch)
-[![Pull requests](https://img.shields.io/github/issues-pr/xunnamius/isomorphic-json-fetch "Number of open pull requests")](https://www.npmjs.com/package/isomorphic-json-fetch)
+[![Black Lives Matter!](https://api.ergodark.com/badges/blm 'Join the movement!')](https://secure.actblue.com/donate/ms_blm_homepage_2019)
+[![Maintenance status](https://img.shields.io/maintenance/active/2021 'Is this package maintained?')](https://www.npmjs.com/package/isomorphic-json-fetch)
+[![Last commit timestamp](https://img.shields.io/github/last-commit/xunnamius/isomorphic-json-fetch/develop 'When was the last commit to the official repo?')](https://www.npmjs.com/package/isomorphic-json-fetch)
+[![Open issues](https://img.shields.io/github/issues/xunnamius/isomorphic-json-fetch 'Number of known issues with this package')](https://www.npmjs.com/package/isomorphic-json-fetch)
+[![Pull requests](https://img.shields.io/github/issues-pr/xunnamius/isomorphic-json-fetch 'Number of open pull requests')](https://www.npmjs.com/package/isomorphic-json-fetch)
 [![Source license](https://img.shields.io/npm/l/isomorphic-json-fetch "This package's source license")](https://www.npmjs.com/package/isomorphic-json-fetch)
-[![NPM version](https://api.ergodark.com/badges/npm-pkg-version/isomorphic-json-fetch "Install this package using npm or yarn!")](https://www.npmjs.com/package/isomorphic-json-fetch)
+[![NPM version](https://api.ergodark.com/badges/npm-pkg-version/isomorphic-json-fetch 'Install this package using npm or yarn!')](https://www.npmjs.com/package/isomorphic-json-fetch)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 
 # isomorphic-json-fetch 🐕
 
 Useful any time your project needs to consume JSON from some endpoint.
 
-This package is a
-small wrapper around unfetch geared specifically for fetching JSON and sharing
-configuration across the application. Specifically:
+This package is a small wrapper around unfetch geared specifically for fetching
+JSON and sharing configuration across the application. Specifically:
 
-+ TypeScript support
-+ Default method is `POST` (unless using SWR)
-+ Sugar functions for GET/POST/PUT/DELETE methods
-+ `content-type` header is set to `application/json`
-+ Cookies are NOT sent along with the rest of the request (configurable)
-+ Request bodies can be anything serializable and will be stringified with
+- TypeScript support
+- Default method is `POST` (unless using SWR)
+- Sugar functions for GET/POST/PUT/DELETE methods
+- `content-type` header is set to `application/json`
+- Cookies are NOT sent along with the rest of the request (configurable)
+- Request bodies can be anything serializable and will be stringified with
   `JSON.stringify`
-+ Response bodies are automatically parsed with `JSON.parse`
-+ `fetch()` will not reject if a non-ok response is received (configurable)
-+ Simple differentiation between 2xx responses and non-2xx non-ok responses
-+ Exports functions to get and set app-wide configuration
-+ Sugar function for simple integration with
+- Response bodies are automatically parsed with `JSON.parse`
+- `fetch()` will not reject if a non-ok response is received (configurable)
+- Simple differentiation between 2xx responses and non-2xx non-ok responses
+- Exports functions to get and set app-wide configuration
+- Sugar function for simple integration with
   [SWR](https://www.npmjs.com/package/swr)
 
 ## Install
@@ -112,8 +111,9 @@ to cause the promise returned by `fetch()` to reject on non-2xx HTTP responses.
 By default, the promise returned by `fetch()` won't reject on HTTP error status
 even if the response is an HTTP 404 or 500. Instead, it will resolve normally,
 and it will only reject on network failure or if anything prevented the request
-from completing. See [the unfetch
-docs](https://github.com/developit/unfetch#caveats) for more information.
+from completing. See
+[the unfetch docs](https://github.com/developit/unfetch#caveats) for more
+information.
 
 For use with [SWR](https://www.npmjs.com/package/swr), add `swr: true` to your
 config and return a higher order function manually or just use the `fetch.swr`
@@ -185,8 +185,8 @@ project to let me know you found it useful! Thank you for your support ✊🏿
 This repository uses a CI/CD
 [semantic-release](https://github.com/semantic-release/semantic-release#readme)
 pipeline for vetting PRs and publishing releases. Be sure to
-[checkout](https://git-scm.com/docs/git-checkout) the `develop` branch (*not
-`main`*) and, when you're ready, fearlessly submit your PR against `develop`.
+[checkout](https://git-scm.com/docs/git-checkout) the `develop` branch (_not
+`main`_) and, when you're ready, fearlessly submit your PR against `develop`.
 The pipeline will take care of the rest 🚀🚀🚀
 
 ### NPM Scripts
@@ -216,7 +216,7 @@ available for this project.
 
 - `npm run clean` to delete all build process artifacts
 - `npm run build` to compile `src/` into `dist/`, which is what makes it into
-the published package
+  the published package
 - `npm run build-docs` to re-build the documentation
 - `npm run build-externals` to compile `external-scripts/` into
   `external-scripts/bin/`
@@ -235,14 +235,14 @@ the published package
 ## Package Details
 
 > You don't need to read this section to use this package, everything should
-"just work"!
+> "just work"!
 
 This is a [dual UMD (CJS2)/ES module][dual-module] package. That means this
 package exposes both UMD+CJS2 and ESM entry points and can be used in most
 JavaScript environments (browsers, any current or LTS Node version, etc).
 
 Loading this package via `require(...)` will cause Node and modern browsers to
-use the [CJS2 bundle][CJS2] entry point, disable [tree shaking][tree-shaking] in
+use the [CJS2 bundle][cjs2] entry point, disable [tree shaking][tree-shaking] in
 Webpack 4, and lead to larger bundles in Webpack 5. Alternatively, loading this
 package via `import { ... } from ...` or `import(...)` will cause Node and
 modern browsers to use the ESM entry point in [versions that support
@@ -256,9 +256,9 @@ points to both the ESM and CJS2 entry points implicitly (no file extension). For
 Webpack 5 and Node versions >= 14, [`package.json`](package.json) includes the
 [`exports`][exports-main-key] key, which points to both entry points explicitly.
 
-Though [`package.json`](package.json) includes [`{ "type":
-"commonjs"}`][local-pkg], note that the ESM entry points are ES module (`.mjs`)
-files. [`package.json`](package.json) also includes the
+Though [`package.json`](package.json) includes
+[`{ "type": "commonjs"}`][local-pkg], note that the ESM entry points are ES
+module (`.mjs`) files. [`package.json`](package.json) also includes the
 [`sideEffects`][side-effects-key] key, which is `false` for [optimal tree
 shaking][tree-shaking], and the `types` key, which points to a TypeScript
 declarations file.
@@ -268,11 +268,17 @@ declarations file.
 > actually be "globally" recognized by third-party code importing this package.
 
 [module-key]: https://webpack.js.org/guides/author-libraries/#final-steps
-[side-effects-key]: https://webpack.js.org/guides/tree-shaking/#mark-the-file-as-side-effect-free
-[dual-module]: https://github.com/nodejs/node/blob/8d8e06a345043bec787e904edc9a2f5c5e9c275f/doc/api/packages.md#dual-commonjses-module-packages
-[exports-main-key]: https://github.com/nodejs/node/blob/8d8e06a345043bec787e904edc9a2f5c5e9c275f/doc/api/packages.md#package-entry-points
-[hazard]: https://github.com/nodejs/node/blob/8d8e06a345043bec787e904edc9a2f5c5e9c275f/doc/api/packages.md#dual-package-hazard
-[CJS2]: https://webpack.js.org/configuration/output/#module-definition-systems
+[side-effects-key]:
+  https://webpack.js.org/guides/tree-shaking/#mark-the-file-as-side-effect-free
+[dual-module]:
+  https://github.com/nodejs/node/blob/8d8e06a345043bec787e904edc9a2f5c5e9c275f/doc/api/packages.md#dual-commonjses-module-packages
+[exports-main-key]:
+  https://github.com/nodejs/node/blob/8d8e06a345043bec787e904edc9a2f5c5e9c275f/doc/api/packages.md#package-entry-points
+[hazard]:
+  https://github.com/nodejs/node/blob/8d8e06a345043bec787e904edc9a2f5c5e9c275f/doc/api/packages.md#dual-package-hazard
+[cjs2]: https://webpack.js.org/configuration/output/#module-definition-systems
 [tree-shaking]: https://webpack.js.org/guides/tree-shaking
-[local-pkg]: https://github.com/nodejs/node/blob/8d8e06a345043bec787e904edc9a2f5c5e9c275f/doc/api/packages.md#type
-[node-esm-support]: https://medium.com/@nodejs/node-js-version-14-available-now-8170d384567e#2368
+[local-pkg]:
+  https://github.com/nodejs/node/blob/8d8e06a345043bec787e904edc9a2f5c5e9c275f/doc/api/packages.md#type
+[node-esm-support]:
+  https://medium.com/@nodejs/node-js-version-14-available-now-8170d384567e#2368
