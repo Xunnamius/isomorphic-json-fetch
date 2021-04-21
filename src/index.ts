@@ -1,13 +1,13 @@
-import unfetch from "isomorphic-unfetch";
+import unfetch from 'isomorphic-unfetch';
 
 // TODO: retire @ergodark/types
-import type { SerializedValue } from "@ergodark/types";
+import type { SerializedValue } from '@ergodark/types';
 
-export type FetchConfig = Omit<RequestInit, "body"> & {
-    swr?: boolean;
-    rejects?: boolean;
-    ignoreParseErrors?: boolean;
-    body?: Record<string, unknown>;
+export type FetchConfig = Omit<RequestInit, 'body'> & {
+  swr?: boolean;
+  rejects?: boolean;
+  ignoreParseErrors?: boolean;
+  body?: Record<string, unknown>;
 };
 
 /**
@@ -22,23 +22,23 @@ export { unfetch };
  * config keys.
  */
 let globalFetchConfig: FetchConfig = {
-    method: "POST",
-    // credentials: 'include', // ? If you want to send and receive cookies
-    headers: { "Content-Type": "application/json" },
+  method: 'POST',
+  // credentials: 'include', // ? If you want to send and receive cookies
+  headers: { 'Content-Type': 'application/json' }
 };
 
 /**
  * Get the default config object merged in during all `fetch()` calls.
  */
 export function getGlobalFetchConfig() {
-    return globalFetchConfig;
+  return globalFetchConfig;
 }
 
 /**
  * Set the default config object merged in during all `fetch()` calls.
  */
 export function setGlobalFetchConfig(config: FetchConfig) {
-    globalFetchConfig = config;
+  globalFetchConfig = config;
 }
 
 /**
@@ -61,19 +61,19 @@ export function setGlobalFetchConfig(config: FetchConfig) {
  * @throws When a non-2xx response is received
  */
 export async function fetch<
-    JsonType extends SerializedValue = Record<string, unknown>,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    ErrorType extends SerializedValue = JsonType
+  JsonType extends SerializedValue = Record<string, unknown>,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  ErrorType extends SerializedValue = JsonType
 >(
-    url: string,
-    config: Omit<FetchConfig, "rejects" | "swr"> & {
-        rejects: true;
-        swr?: false;
-    }
+  url: string,
+  config: Omit<FetchConfig, 'rejects' | 'swr'> & {
+    rejects: true;
+    swr?: false;
+  }
 ): Promise<{
-    res: Response;
-    json: JsonType;
-    error: undefined;
+  res: Response;
+  json: JsonType;
+  error: undefined;
 }>;
 /**
  * Performs an isomorphic (un)fetch and returns the JsonType response or throws
@@ -89,17 +89,18 @@ export async function fetch<
  * ```
  *
  * @throws When a non-2xx response is received
+ * @see https://swr.vercel.app
  */
 export async function fetch<
-    JsonType extends SerializedValue = Record<string, unknown>,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    ErrorType extends SerializedValue = JsonType
+  JsonType extends SerializedValue = Record<string, unknown>,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  ErrorType extends SerializedValue = JsonType
 >(
-    url: string,
-    config: Omit<FetchConfig, "swr" | "rejects"> & {
-        swr: true;
-        rejects?: false;
-    }
+  url: string,
+  config: Omit<FetchConfig, 'swr' | 'rejects'> & {
+    swr: true;
+    rejects?: false;
+  }
 ): Promise<JsonType>;
 /**
  * Performs an isomorphic (un)fetch, following redirects as necessary.
@@ -130,86 +131,114 @@ export async function fetch<
  * When parsing the body for JSON content fails and `{ ignoreParseErrors: true }`
  */
 export async function fetch<
-    JsonType extends SerializedValue = Record<string, unknown>,
-    ErrorType extends SerializedValue = JsonType
+  JsonType extends SerializedValue = Record<string, unknown>,
+  ErrorType extends SerializedValue = JsonType
 >(
-    url: string,
-    config?: FetchConfig
+  url: string,
+  config?: FetchConfig
 ): Promise<{
-    res: Response;
-    json: JsonType | undefined;
-    error: ErrorType | undefined;
+  res: Response;
+  json: JsonType | undefined;
+  error: ErrorType | undefined;
 }>;
 export async function fetch<
-    JsonType extends SerializedValue = Record<string, unknown>,
-    ErrorType extends SerializedValue = JsonType
+  JsonType extends SerializedValue = Record<string, unknown>,
+  ErrorType extends SerializedValue = JsonType
 >(url: string, config?: FetchConfig): Promise<unknown> {
-    const parsedOptions = {
-        ...getGlobalFetchConfig(),
-        ...(config?.swr ? { method: "GET" } : {}),
-        ...config,
-        body:
-            config?.body !== undefined
-                ? JSON.stringify(config.body)
-                : undefined,
-    };
+  const parsedOptions = {
+    ...getGlobalFetchConfig(),
+    ...(config?.swr ? { method: 'GET' } : {}),
+    ...config,
+    body: config?.body !== undefined ? JSON.stringify(config.body) : undefined
+  };
 
-    const res = await unfetch(url, parsedOptions);
-    let json: JsonType | undefined = undefined;
-    let error: ErrorType | undefined = undefined;
+  const res = await unfetch(url, parsedOptions);
+  let json: JsonType | undefined = undefined;
+  let error: ErrorType | undefined = undefined;
 
-    try {
-        json = await res.json();
-    } catch (err) {
-        if (!parsedOptions?.ignoreParseErrors) throw err;
-    }
+  try {
+    json = await res.json();
+  } catch (err) {
+    if (!parsedOptions?.ignoreParseErrors) throw err;
+  }
 
-    if (!res.ok) {
-        error = json as ErrorType;
-        json = undefined;
+  if (!res.ok) {
+    error = json as ErrorType;
+    json = undefined;
 
-        if (parsedOptions?.swr || parsedOptions?.rejects) throw error;
-    }
+    if (parsedOptions?.swr || parsedOptions?.rejects) throw error;
+  }
 
-    return parsedOptions?.swr ? json : { res, json, error };
+  return parsedOptions?.swr ? json : { res, json, error };
 }
 
 /**
  * Syntactic sugar for calling `fetch(..., { method: 'GET', ... })`.
  */
-fetch.get = <
-    JsonType extends SerializedValue = Record<string, unknown>,
-    ErrorType extends SerializedValue = JsonType
+fetch.get = (<
+  JsonType extends SerializedValue = Record<string, unknown>,
+  ErrorType extends SerializedValue = JsonType
 >(
-    url: string,
-    config?: FetchConfig
-) => fetch<JsonType, ErrorType>(url, { method: "GET", ...config });
+  url: Parameters<typeof fetch>['0'],
+  config?: Parameters<typeof fetch>['1']
+) => {
+  return fetch<JsonType, ErrorType>(url, {
+    method: 'GET',
+    ...config
+  });
+}) as typeof fetch;
 
 /**
  * Syntactic sugar for calling `fetch(..., { method: 'PUT', ... })`.
  */
-fetch.put = <
-    JsonType extends SerializedValue = Record<string, unknown>,
-    ErrorType extends SerializedValue = JsonType
+fetch.put = (<
+  JsonType extends SerializedValue = Record<string, unknown>,
+  ErrorType extends SerializedValue = JsonType
 >(
-    url: string,
-    config?: FetchConfig
-) => fetch<JsonType, ErrorType>(url, { method: "PUT", ...config });
+  url: Parameters<typeof fetch>['0'],
+  config?: Parameters<typeof fetch>['1']
+) => {
+  return fetch<JsonType, ErrorType>(url, {
+    method: 'PUT',
+    ...config
+  });
+}) as typeof fetch;
 
 /**
  * Syntactic sugar for calling `fetch(..., { method: 'DELETE', ... })`.
  */
-fetch.delete = <
-    JsonType extends SerializedValue = Record<string, unknown>,
-    ErrorType extends SerializedValue = JsonType
+fetch.delete = (<
+  JsonType extends SerializedValue = Record<string, unknown>,
+  ErrorType extends SerializedValue = JsonType
 >(
-    url: string,
-    config?: FetchConfig
-) => fetch<JsonType, ErrorType>(url, { method: "DELETE", ...config });
+  url: Parameters<typeof fetch>['0'],
+  config?: Parameters<typeof fetch>['1']
+) => {
+  return fetch<JsonType, ErrorType>(url, {
+    method: 'DELETE',
+    ...config
+  });
+}) as typeof fetch;
 
 /**
  * Syntactic sugar for calling `fetch(..., { method: 'POST', ... })`.
  */
-fetch.post = fetch;
+fetch.post = (<
+  JsonType extends SerializedValue = Record<string, unknown>,
+  ErrorType extends SerializedValue = JsonType
+>(
+  url: Parameters<typeof fetch>['0'],
+  config?: Parameters<typeof fetch>['1']
+) => {
+  return fetch<JsonType, ErrorType>(url, {
+    method: 'POST',
+    ...config
+  });
+}) as typeof fetch;
 
+/**
+ * Syntactic sugar for SWR
+ *
+ * @see https://swr.vercel.app
+ */
 fetch.swr = async (key: string) => fetch(key, { swr: true });
