@@ -1,8 +1,11 @@
 {
   "name": "isomorphic-json-fetch",
-  "version": "1.0.15",
-  "description": "A small wrapper around unfetch geared specifically for handling JSON",
+  "version": "1.0.16",
+  "description": "⛔️ [DEPRECATED] A small wrapper around unfetch geared specifically for handling JSON",
   "keywords": [
+    "deprecated",
+    "obsolete",
+    "archived",
     "isomorphic",
     "json",
     "fetch",
