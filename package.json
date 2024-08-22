@@ -47,8 +47,6 @@
     "clean": "rm -rf dist npm.pipe coverage external-scripts/bin",
     "fixup": "npm run lint && npm run test && npm run build && npm run check-build && npx npm-force-resolutions && npx Xunnamius/sort-package-json && npm run build-docs && npm audit",
     "list-tasks": "npm run",
-    "prepublishOnly": "npm run build",
-    "postpublish": "npm run clean",
     "repl": "command -v rlwrap >/dev/null && rlwrap npx -p @babel/core -p @babel/node babel-node",
     "semantic-release": "semantic-release",
     "test": "npm run test-unit",
